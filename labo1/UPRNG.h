@@ -14,8 +14,8 @@ private:
     std::uniform_int_distribution<UIntType> distribution;
 
 public:
-
-    UniformGenerator(UIntType a, UIntType b) : distribution(std::uniform_int_distribution<UIntType>(a, b)) {}
+    UniformGenerator(UIntType a, UIntType b, std::seed_seq seed)
+            : distribution(std::uniform_int_distribution<UIntType>(a, b)), generator(std::mt19937_64(seed)) {}
 
     UIntType next() {
         return distribution(generator);
