@@ -1,12 +1,13 @@
 #include <iostream>
 #include <random>
-#include "UPRNG.h"
+#include "Generator.h"
 
 using namespace std;
 
 int main() {
-    std::seed_seq seed = {42, 42, 42};
-    UniformGenerator<uintmax_t> generator(5, 10, seed);
+
+    UniformRealGenerator<double> generator(0, 1);
+    generator.setSeed({42, 42, 42});
 
     for (int i = 0; i < 20; ++i) {
         cout << generator.next() << endl;
