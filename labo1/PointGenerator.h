@@ -11,19 +11,19 @@ struct Point {
 template <typename RealType>
 class RealPointGenerator {
 private:
-    UniformRealGenerator<RealType> xGen, yGen;
+    UniformRealGenerator<RealType> generator;
+    RealType xMin, xMax;
+    RealType yMin, yMax;
 public:
 
-    RealPointGenerator(RealType xMin, RealType xMax, RealType yMin, RealType yMax)
-            : xGen(UniformRealGenerator<RealType>(xMin, xMax)), yGen(UniformRealGenerator<RealType>(yMin, yMax)) {}
+    RealPointGenerator(RealType xMin, RealType xMax, RealType yMin, RealType yMax, const std::seed_seq& seed)
+            : xMin(xMin), xMax(xMax), yMin(yMin), yMax(yMax), generator(UniformRealGenerator<RealType>(0, 1)) {
 
-    void setSeed(const std::seed_seq& seed) {
-        xGen.setSeed(seed);
-        yGen.setSeed(seed);
+        generator.setSeed(seed);
     }
 
     Point<RealType> next() {
-        return {xGen.next(), yGen.next()};
+        return {generator.next() * (xMax - xMin), generator.next() * (yMax - yMin)};
     }
 };
 

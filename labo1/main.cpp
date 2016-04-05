@@ -5,18 +5,6 @@
 
 using namespace std;
 
-double a = 3, b = 4;
-double gVal = 1/(b-a);
-
-double f(double x) {
-    return x;
-}
-
-double g(double x) {
-   return gVal;
-}
-
-
 int main() {
 
     using namespace std;

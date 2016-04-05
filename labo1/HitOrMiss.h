@@ -51,8 +51,14 @@ public:
             }
         }
 
-        generator = new RealPointGenerator<RealType>(a, b, 0, yMax);
-        std::cout << "yMax :" << yMax << std::endl;
+        generator = new RealPointGenerator<RealType>(a, b, 0, yMax, seed);
+
+        std::cout << "a: " << a << ", b: " << b << ", yMax : " << yMax << std::endl;
+
+        for (int i = 0; i < 10; ++i) {
+            Point<double> p = generator->next();
+            std::cout << "(" << p.x << ", " << p.y << ")" << std::endl;
+        }
     }
 
     ~HitOrMiss() {
@@ -68,7 +74,7 @@ public:
         do {
             p = generator->next();
 
-            std::cout << p.x << ", " << p.y << std::endl;
+            std::cout << p.x << ", " << p.y << ", " << fParts[sliceIndex](p.x) << std::endl;
         } while (p.y > fParts[sliceIndex](p.x));
 
         return p.x;
