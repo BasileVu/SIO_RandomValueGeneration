@@ -25,7 +25,7 @@ private:
 
 public:
 
-    HitOrMiss(const std::vector<RealType>& xs, const std::vector<RealType>& ys, const std::seed_seq& seed) throw(std::invalid_argument)
+    HitOrMiss(const std::vector<RealType>& xs, const std::vector<RealType>& ys, const std::seed_seq& seed) noexcept(false)
             : xs(xs), ys(ys) {
 
         /*if (!Checker<RealType>::check(xs, ys)) {
@@ -44,7 +44,7 @@ public:
             // création de tranches
             if (i < xs.size() - 1) {
                 slices.push_back({xs[i], xs[i+1], [&xs, &ys, i](RealType x) {
-                    RealType m = (ys[i+1] - ys[i]) / (xs[i+1], xs[i]);
+                    RealType m = (ys[i+1] - ys[i]) / (xs[i+1] - xs[i]);
                     return m * (x - xs[i]) + ys[i];
                 }});
             }
@@ -53,12 +53,11 @@ public:
         generator = new RealPointGenerator<RealType>(a, b, 0, yMax, seed);
 
         std::cout << "a: " << a << ", b: " << b << ", yMax : " << yMax << std::endl;
-        std::cout << "nSlices: " << slices.size() << std::endl;
-
-        for (int i = 0; i < 10; ++i) {
-            Point<double> p = generator->next();
-            std::cout << "(" << p.x << ", " << p.y << ")" << std::endl;
+        std::cout << "nSlices: " << slices.size() << " : ";
+        for (Slice<RealType>& s: slices) {
+            std::cout << "(" << s.x1 << ", " << s.x2 << ") ";
         }
+        std::cout << std::endl;
     }
 
     ~HitOrMiss() {
@@ -77,7 +76,7 @@ public:
             // on cherche la "tranche" (l'intervalle) dans laquelle X se trouve
             sliceIndex = findSlice(p.x);
 
-            //std::cout << "X = " << p.x << ", " << "Y = " << p.y << ", " << "f(X) = " << slices[sliceIndex].f(p.x) << std::endl;
+            //std::cout << "X = " << p.x << ", Y = " << p.y << ", sliceIndex = " << sliceIndex << ", f(X) = " << slices[sliceIndex].f(p.x) << std::endl;
 
             // rejet si Y est > que f(X), avec f la fonction affine associée à la tranche
         } while (p.y > slices[sliceIndex].f(p.x));
