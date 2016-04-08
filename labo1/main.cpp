@@ -1,6 +1,7 @@
 #include <iostream>
 #include <random>
 #include "HitOrMiss.h"
+#include "ExpectedValueEstimator.h"
 
 using namespace std;
 
@@ -11,13 +12,15 @@ int main() {
     seed_seq seed = {42, 42, 42};
 
     {
-        vector<double> xs = {1, 15};
+        vector<double> xs = {5, 15};
         vector<double> ys = {1, 1};
+
+        /*ExpectedValueEstimator<double, double> estimator(HitOrMiss<double>(xs, ys, seed));
+        cout << estimator.generate(1000000) << endl;*/
 
         HitOrMiss<double> hom(xs, ys, seed);
         double acc = 0;
         for (int i = 0; i < 1000000; ++i) {
-            //cout << " > " << hom.generate() << endl;
             acc += hom.generate();
         }
 
@@ -31,7 +34,6 @@ int main() {
         HitOrMiss<double> hom(xs, ys, seed);
         double acc = 0;
         for (int i = 0; i < 1000000; ++i) {
-           //cout << " > " << hom.generate() << endl;
             acc += hom.generate();
         }
 
@@ -40,12 +42,11 @@ int main() {
 
     {
         vector<double> xs = {2, 4, 7, 9, 12, 13, 17, 20};
-        vector<double> ys = {8, 10, 10, 9, 5, 9, 19, 6};
+        vector<double> ys = {8, 10, 10, 9, 5, 9, 10, 6};
 
         HitOrMiss<double> hom(xs, ys, seed);
         double acc = 0;
         for (int i = 0; i < 1000000; ++i) {
-            //cout << " > " << hom.generate() << endl;
             acc += hom.generate();
         }
 
@@ -59,7 +60,6 @@ int main() {
         HitOrMiss<double> hom(xs, ys, seed);
         double acc = 0;
         for (int i = 0; i < 1000000; ++i) {
-            //cout << " > " << hom.generate() << endl;
             acc += hom.generate();
         }
 

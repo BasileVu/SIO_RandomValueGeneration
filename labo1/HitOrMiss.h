@@ -5,63 +5,29 @@
 #include <iostream>
 #include <algorithm>
 
+#include "RandomValueGenerator.h"
 #include "UniformGenerator.h"
 #include "PointGenerator.h"
 #include "Checker.h"
-#include "Slice.h"
+#include "Part.h"
 
 /**
  * Classe utilisant une methode bete et mechante d'acceptation-rejet afin de générer des
  * réalisations de variable aléatoires.
  */
 template <typename RealType>
-class HitOrMiss {
-private:
-    const std::vector<RealType>& xs, ys;
-    RealType a, b, yMax = 0;
-    RealPointGenerator<RealType>* generator;
-
-    std::vector<Slice<RealType>> slices;
-
+class HitOrMiss : public RandomValueGenerator<RealType> {
 public:
 
     HitOrMiss(const std::vector<RealType>& xs, const std::vector<RealType>& ys, const std::seed_seq& seed) noexcept(false)
-            : xs(xs), ys(ys) {
+            : RandomValueGenerator<RealType>(xs, ys, seed) {
 
-        /*if (!Checker<RealType>::check(xs, ys)) {
-            throw std::invalid_argument("Incorrect values");
-        }*/
-
-        a = xs.front(), b = xs.back();
-        slices.reserve(xs.size());
-
-        for (size_t i = 0; i < xs.size(); ++i) {
-
-            if (yMax < ys[i]) {
-                yMax = ys[i];
-            }
-
-            // création de tranches
-            if (i < xs.size() - 1) {
-                slices.push_back({xs[i], xs[i+1], [&xs, &ys, i](RealType x) {
-                    RealType m = (ys[i+1] - ys[i]) / (xs[i+1] - xs[i]);
-                    return m * (x - xs[i]) + ys[i];
-                }});
-            }
-        }
-
-        generator = new RealPointGenerator<RealType>(a, b, 0, yMax, seed);
-
-        std::cout << "a: " << a << ", b: " << b << ", yMax : " << yMax << std::endl;
-        std::cout << "nSlices: " << slices.size() << " : ";
-        for (Slice<RealType>& s: slices) {
+        std::cout << "a: " << this->a << ", b: " << this->b << ", yMax : " << this->yMax << std::endl;
+        std::cout << "nSlices: " << this->slices.size() << " : ";
+        for (Part<RealType>& s: this->slices) {
             std::cout << "(" << s.x1 << ", " << s.x2 << ") ";
         }
         std::cout << std::endl;
-    }
-
-    ~HitOrMiss() {
-        delete generator;
     }
 
     RealType generate() {
@@ -71,23 +37,29 @@ public:
 
         do {
             // génération du point (X,Y)
-            p = generator->next();
+            p = this->generator->next();
 
-            // on cherche la "tranche" (l'intervalle) dans laquelle X se trouve
-            sliceIndex = findSlice(p.x);
+            // on cherche le morceau de dans laquelle X se trouve
+            sliceIndex = findPart(p.x);
 
             //std::cout << "X = " << p.x << ", Y = " << p.y << ", sliceIndex = " << sliceIndex << ", f(X) = " << slices[sliceIndex].f(p.x) << std::endl;
 
             // rejet si Y est > que f(X), avec f la fonction affine associée à la tranche
-        } while (p.y > slices[sliceIndex].f(p.x));
+        } while (p.y > this->slices[sliceIndex].f(p.x));
 
         return p.x;
     }
 
 private:
-    size_t findSlice(RealType x) {
 
-        size_t first = 0, last = slices.size() - 1; // indices des tranches à prendre en compte
+    /**
+     * \brief Recherche dichotomique afin de trouver dans quelle intervalle x se trouve.
+     * \param x l'abscisse dont on veut connaître l'intervalle.
+     * \return l'indice du morceau dans lequel x se trouve.
+     */
+    size_t findPart(RealType x) {
+
+        size_t first = 0, last = this->slices.size() - 1; // indices des tranches à prendre en compte
 
         while (true) {
 
@@ -98,7 +70,7 @@ private:
 
             // on regarde si x est dans la première ou deuxième moitié de l'intervalle de recherche
             size_t mid = (last-first)/2 + first;
-            if (x < slices[mid].x2) {   // première moitié
+            if (x < this->slices[mid].x2) {   // première moitié
                 last = mid;
             } else {                    // deuxième moitié
                 first = mid+1;
