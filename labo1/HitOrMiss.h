@@ -5,7 +5,7 @@
 #include <iostream>
 #include <algorithm>
 
-#include "Generator.h"
+#include "UniformGenerator.h"
 #include "PointGenerator.h"
 #include "Checker.h"
 #include "Slice.h"
@@ -43,7 +43,10 @@ public:
 
             // création de tranches
             if (i < xs.size() - 1) {
-                slices.push_back({xs[i], xs[i+1], [](RealType x) { return x; }});
+                slices.push_back({xs[i], xs[i+1], [&xs, &ys, i](RealType x) {
+                    RealType m = (ys[i+1] - ys[i]) / (xs[i+1], xs[i]);
+                    return m * (x - xs[i]) + ys[i];
+                }});
             }
         }
 
@@ -74,7 +77,7 @@ public:
             // on cherche la "tranche" (l'intervalle) dans laquelle X se trouve
             sliceIndex = findSlice(p.x);
 
-            std::cout << p.x << ", " << p.y << ", " << slices[sliceIndex].f(p.x) << std::endl;
+            //std::cout << "X = " << p.x << ", " << "Y = " << p.y << ", " << "f(X) = " << slices[sliceIndex].f(p.x) << std::endl;
 
             // rejet si Y est > que f(X), avec f la fonction affine associée à la tranche
         } while (p.y > slices[sliceIndex].f(p.x));
@@ -103,6 +106,8 @@ private:
             }
         }
     }
+
+    
 };
 
 #endif // HITORMISS_H

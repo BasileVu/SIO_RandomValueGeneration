@@ -1,7 +1,7 @@
 #ifndef LABO1_POINTGENERATOR_H
 #define LABO1_POINTGENERATOR_H
 
-#include "Generator.h"
+#include "UniformGenerator.h"
 
 template <typename T>
 struct Point {
@@ -23,7 +23,7 @@ public:
     }
 
     Point<RealType> next() {
-        return {generator.next() * (xMax - xMin), generator.next() * (yMax - yMin)};
+        return {generator.next() * (xMax - xMin) + xMin, generator.next() * (yMax - yMin) + yMin};
     }
 };
 
