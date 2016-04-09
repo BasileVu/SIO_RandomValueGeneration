@@ -2,6 +2,7 @@
 #include <random>
 #include "HitOrMiss.h"
 #include "MixedGeometric.h"
+#include "MixedInverse.h"
 
 using namespace std;
 
@@ -11,24 +12,28 @@ int main() {
 
     seed_seq seed = {42, 42, 42};
 
-    /*{
+    {
         cout << "-- Uniforme (5,1) (15, 1) --" << endl;
         vector<double> xs = {5, 15};
         vector<double> ys = {1, 1};
 
         HitOrMiss hom(xs, ys, seed);
         MixedGeometric mgeo(xs, ys, seed);
+        MixedInverse minv(xs, ys, seed);
 
-        double accHom = 0, accMGeo = 0;
-        for (int i = 0; i < 1000000; ++i) {
+        double accHom = 0, accMGeo = 0, accMinv = 0;
+        for (int i = 0; i < 10000; ++i) {
             accHom += hom.generate();
             accMGeo += mgeo.generate();
+            accMinv += minv.generate();
         }
 
-        cout << "> " << accHom / 1000000 << endl;
-        cout << "> " << accMGeo / 1000000 << endl;
-    }*/
+        cout << "> " << accHom / 10000 << endl;
+        cout << "> " << accMGeo / 10000 << endl;
+        cout << "> " << accMinv / 10000 << endl;
+    }
 
+    /*
     {
         cout << "-- Deux triangulaires --" << endl;
         vector<double> xs = {2, 3, 7, 10, 14, 15};
@@ -38,13 +43,13 @@ int main() {
         MixedGeometric mgeo(xs, ys, seed);
 
         double accHom = 0, accMGeo = 0;
-        for (int i = 0; i < 1000000; ++i) {
+        for (int i = 0; i < 10000; ++i) {
             accHom += hom.generate();
             accMGeo += mgeo.generate();
         }
 
-        cout << "> " << accHom / 1000000 << endl;
-        cout << "> " << accMGeo / 1000000 << endl;
+        cout << "> " << accHom / 10000 << endl;
+        cout << "> " << accMGeo / 10000 << endl;
     }
 
     {
@@ -81,7 +86,7 @@ int main() {
 
         cout << "> " << accHom / 1000000 << endl;
         cout << "> " << accMGeo / 1000000 << endl;
-    }
+    }*/
 
     return EXIT_SUCCESS;
 }

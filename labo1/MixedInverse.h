@@ -1,10 +1,13 @@
-#ifndef LABO1_MIXEDGEOMETRIC_H
-#define LABO1_MIXEDGEOMETRIC_H
+#ifndef LABO1_MIXEDINVERSE_H
+#define LABO1_MIXEDINVERSE_H
 
-#include "PointGenerator.h"
+#include <vector>
+#include <cmath>
+
 #include "UniformGenerator.h"
+#include "Slice.h"
 
-class MixedGeometric {
+class MixedInverse {
 private:
     const std::vector<double>& xs;
     const std::vector<double>& ys;
@@ -16,7 +19,7 @@ private:
     std::vector<double> F_parts; // "bouts" de la fonction de répartition; F_parts[i] = F_parts[i-1] + pks[i]
 public:
 
-    MixedGeometric(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed) noexcept(false)
+    MixedInverse(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed) noexcept(false)
             : xs(xs), ys(ys), seed(seed) {
 
         generator = new UniformRealGenerator<double>(0, 1);
@@ -72,21 +75,25 @@ public:
         // K représente l'indice de l'intervalle sélectionné.
         size_t K = generateK();
 
-        // Ensuite, on génère une réalisation d'une variable de densité f_K en acceptant à tous les coups X.
+        // Ensuite, on applique la méthode des fonctions inverses.
         Slice<double> s = slices[K];
-        RealPointGenerator<double> pointGenerator(s.x1, s.x2, 0, std::max(s.f_k(s.x1), s.f_k(s.x2)), seed);
 
-        Point<double> p = pointGenerator.next();
+        double y1 = s.f_k(s.x1);
+        double y2 = s.f_k(s.x2);
 
-        // Si Y est sous f_k, ok, on retourne X. Sinon, on applique une symétrie à X et on le retourne.
-        if (p.y <= s.f_k(p.x)) {
-            return p.x;
+        double U = generator->next();
+
+        // Si y1 = y2, alors on est dans le cas d'une uniforme. Sinon, on inverse la fonction de repartition associée
+        // à la fonction f_k.
+        if (y1 == y2) {
+            return s.x1 + U*(s.x2 - s.x1);
         } else {
-            return (s.x1 + (s.x2 - p.x));
+            double m = (y2 - y1)/(s.x2 - s.x1);
+            return s.x1 + (sqrt( (y2*y2 - y1*y1) * U + y1*y1) - y1) / m;
         }
     }
 
-    ~MixedGeometric() {
+    ~MixedInverse() {
         delete generator;
     }
 
@@ -107,4 +114,4 @@ private:
     }
 };
 
-#endif //LABO1_MIXEDGEOMETRIC_H
+#endif //LABO1_MIXEDINVERSE_H
