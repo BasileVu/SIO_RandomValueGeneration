@@ -10,17 +10,17 @@ class ExpectedValueEstimator {
 public:
     ExpectedValueEstimator(const RandomValueGenerator<T>& generator) : generator(generator) {}
 
-    ResultType generate(size_t numSimulations) const noexcept(false) {
-        if (numSimulations == 0) {
+    ResultType generate(size_t nSim) const noexcept(false) {
+        if (nSim == 0) {
             throw std::invalid_argument("Can't estimate expected value with 0 value");
         }
 
         ResultType acc = 0;
-        for (size_t i = 0; i < numSimulations; ++i) {
+        for (size_t i = 0; i < nSim; ++i) {
             acc += generator.generate();
         }
 
-        return acc / numSimulations;
+        return acc / nSim;
     }
 };
 
