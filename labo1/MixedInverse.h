@@ -51,18 +51,18 @@ public:
         // Ensuite, on applique la méthode des fonctions inverses.
         Slice<double> s = slices[K];
 
-        double y1 = s.f_k(s.x1);
-        double y2 = s.f_k(s.x2);
+        double x1 = s.p1.x, x2 = s.p2.x;
+        double y1 = s.p1.y, y2 = s.p2.y;
 
         double U = generator->next();
 
         // Si y1 = y2, alors on est dans le cas d'une uniforme. Sinon, on inverse la fonction de repartition associée
         // à la fonction f_k.
         if (y1 == y2) {
-            return s.x1 + U*(s.x2 - s.x1);
+            return x1 + U*(x2 - x1);
         } else {
-            double m = (y2 - y1)/(s.x2 - s.x1);
-            return s.x1 + (sqrt( (y2*y2 - y1*y1) * U + y1*y1 ) - y1) / m;
+            double m = (y2 - y1)/(x2 - x1);
+            return x1 + (sqrt( (y2*y2 - y1*y1) * U + y1*y1 ) - y1) / m;
         }
     }
 

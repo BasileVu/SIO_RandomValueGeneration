@@ -38,7 +38,7 @@ public:
             // génération du point (X,Y)
             p = pointGenerator->next(a, b, 0, yMax);
 
-            // on cherche le morceau de dans laquelle X se trouve
+            // on cherche le morceau lié à l'intervalle dans laquelle X se trouve
             sliceIndex = findPart(p.x);
 
             // rejet si Y est > que f(X), avec f_k la fonction affine associée à la tranche k
@@ -71,7 +71,7 @@ private:
 
             // on regarde si x est dans la première ou deuxième moitié de l'intervalle de recherche
             size_t mid = (last-first)/2 + first;
-            if (x < slices[mid].x2) {   // première moitié
+            if (x < slices[mid].p2.x) {   // première moitié
                 last = mid;
             } else {                    // deuxième moitié
                 first = mid+1;

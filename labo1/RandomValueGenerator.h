@@ -1,5 +1,5 @@
-#ifndef LABO1_RANDOM_VALUE_GENERATOR_H
-#define LABO1_RANDOM_VALUE_GENERATOR_H
+#ifndef RANDOM_VALUE_GENERATOR_H
+#define RANDOM_VALUE_GENERATOR_H
 
 #include <vector>
 #include "PointGenerator.h"
@@ -13,7 +13,7 @@ protected:
     std::vector<Slice<T>> slices;
 
 public:
-    RandomValueGenerator(const std::vector<T>& xs, const std::vector<T>& ys)
+    RandomValueGenerator(const std::vector<T>& xs, const std::vector<T>& ys) noexcept(false)
             : xs(xs), ys(ys) {
 
         /*if (!Checker<T>::check(xs, ys)) {
@@ -34,10 +34,8 @@ private:
             // création de tranches
             if (i < xs.size() - 1) {
 
-                Slice<T> s;
-                s.x1 = xs[i];
-                s.x2 = xs[i+1];
-                s.A_k = (T)(ys[i+1] + ys[i]) * (xs[i+1] - xs[i]) / 2;
+                Slice<T> s {{xs[i], ys[i]}, {xs[i+1], ys[i+1]}};
+                s.A_k = (double)(ys[i+1] + ys[i]) * (xs[i+1] - xs[i]) / 2;
                 s.f_k = [this, i](T x) {
                     T m = (ys[i + 1] - ys[i]) / (xs[i+1] - xs[i]);
                     return m * (x - xs[i]) + ys[i];

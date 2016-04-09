@@ -53,13 +53,13 @@ public:
         // Ensuite, on génère une réalisation d'une variable de densité f_K en acceptant à tous les coups X.
         Slice<double> s = slices[K];
 
-        Point<double> p = pointGenerator->next(s.x1, s.x2, 0, std::max(s.f_k(s.x1), s.f_k(s.x2)));
+        Point<double> p = pointGenerator->next(s.p1.x, s.p2.x, 0, std::max(s.p1.y, s.p2.y));
 
         // Si Y est sous f_k, ok, on retourne X. Sinon, on applique une symétrie à X et on le retourne.
         if (p.y <= s.f_k(p.x)) {
             return p.x;
         } else {
-            return (s.x1 + (s.x2 - p.x));
+            return (s.p1.x + (s.p2.x - p.x));
         }
     }
 
