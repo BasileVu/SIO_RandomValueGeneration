@@ -1,7 +1,7 @@
 #include <iostream>
 #include <random>
 #include "HitOrMiss.h"
-#include "ExpectedValueEstimator.h"
+#include "MixedGeometric.h"
 
 using namespace std;
 
@@ -11,59 +11,76 @@ int main() {
 
     seed_seq seed = {42, 42, 42};
 
-    {
+    /*{
+        cout << "-- Uniforme (5,1) (15, 1) --" << endl;
         vector<double> xs = {5, 15};
         vector<double> ys = {1, 1};
 
-        /*ExpectedValueEstimator<double, double> estimator(HitOrMiss<double>(xs, ys, seed));
-        cout << estimator.generate(1000000) << endl;*/
+        HitOrMiss hom(xs, ys, seed);
+        MixedGeometric mgeo(xs, ys, seed);
 
-        HitOrMiss<double> hom(xs, ys, seed);
-        double acc = 0;
+        double accHom = 0, accMGeo = 0;
         for (int i = 0; i < 1000000; ++i) {
-            acc += hom.generate();
+            accHom += hom.generate();
+            accMGeo += mgeo.generate();
         }
 
-        cout << "> " << acc / 1000000 << endl;
-    }
+        cout << "> " << accHom / 1000000 << endl;
+        cout << "> " << accMGeo / 1000000 << endl;
+    }*/
 
     {
+        cout << "-- Deux triangulaires --" << endl;
         vector<double> xs = {2, 3, 7, 10, 14, 15};
         vector<double> ys = {0, 1, 0, 0, 1, 0};
 
-        HitOrMiss<double> hom(xs, ys, seed);
-        double acc = 0;
+        HitOrMiss hom(xs, ys, seed);
+        MixedGeometric mgeo(xs, ys, seed);
+
+        double accHom = 0, accMGeo = 0;
         for (int i = 0; i < 1000000; ++i) {
-            acc += hom.generate();
+            accHom += hom.generate();
+            accMGeo += mgeo.generate();
         }
 
-        cout << "> " << acc / 1000000 << endl;
+        cout << "> " << accHom / 1000000 << endl;
+        cout << "> " << accMGeo / 1000000 << endl;
     }
 
     {
+        cout << "-- profil plutot plat --" << endl;
         vector<double> xs = {2, 4, 7, 9, 12, 13, 17, 20};
         vector<double> ys = {8, 10, 10, 9, 5, 9, 10, 6};
 
-        HitOrMiss<double> hom(xs, ys, seed);
-        double acc = 0;
+        HitOrMiss hom(xs, ys, seed);
+        MixedGeometric mgeo(xs, ys, seed);
+
+        double accHom = 0, accMGeo = 0;
         for (int i = 0; i < 1000000; ++i) {
-            acc += hom.generate();
+            accHom += hom.generate();
+            accMGeo += mgeo.generate();
         }
 
-        cout << "> " << acc / 1000000 << endl;
+        cout << "> " << accHom / 1000000 << endl;
+        cout << "> " << accMGeo / 1000000 << endl;
     }
     
     {
+        cout << "-- Profil accidenté --" << endl;
         vector<double> xs = {2, 3, 5, 10, 12, 13, 15, 17, 19, 20};
         vector<double> ys = {1, 10, 0, 1, 8, 4, 1, 0, 2, 9};
 
-        HitOrMiss<double> hom(xs, ys, seed);
-        double acc = 0;
+        HitOrMiss hom(xs, ys, seed);
+        MixedGeometric mgeo(xs, ys, seed);
+
+        double accHom = 0, accMGeo = 0;
         for (int i = 0; i < 1000000; ++i) {
-            acc += hom.generate();
+            accHom += hom.generate();
+            accMGeo += mgeo.generate();
         }
 
-        cout << "> " << acc / 1000000 << endl;
+        cout << "> " << accHom / 1000000 << endl;
+        cout << "> " << accMGeo / 1000000 << endl;
     }
 
     return EXIT_SUCCESS;

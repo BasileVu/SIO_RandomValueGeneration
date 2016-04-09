@@ -1,12 +1,8 @@
 #ifndef LABO1_POINTGENERATOR_H
 #define LABO1_POINTGENERATOR_H
 
+#include "Point.h"
 #include "UniformGenerator.h"
-
-template <typename T>
-struct Point {
-    T x, y;
-};
 
 template <typename RealType>
 class RealPointGenerator {

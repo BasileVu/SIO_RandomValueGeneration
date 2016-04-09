@@ -5,49 +5,82 @@
 #include <iostream>
 #include <algorithm>
 
-#include "RandomValueGenerator.h"
-#include "UniformGenerator.h"
 #include "PointGenerator.h"
 #include "Checker.h"
-#include "Part.h"
+#include "Slice.h"
 
 /**
  * Classe utilisant une methode bete et mechante d'acceptation-rejet afin de générer des
  * réalisations de variable aléatoires.
  */
-template <typename RealType>
-class HitOrMiss : public RandomValueGenerator<RealType> {
+class HitOrMiss {
+private:
+    const std::vector<double>& xs;
+    const std::vector<double>& ys;
+    RealPointGenerator<double>* generator;
+    double a, b, yMax = 0;
+    std::vector<Slice<double>> slices;
 public:
 
-    HitOrMiss(const std::vector<RealType>& xs, const std::vector<RealType>& ys, const std::seed_seq& seed) noexcept(false)
-            : RandomValueGenerator<RealType>(xs, ys, seed) {
+    HitOrMiss(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed) noexcept(false)
+            : xs(xs), ys(ys) {
 
+        a = xs.front(), b = xs.back();
+        slices.reserve(xs.size());
+
+        for (size_t i = 0; i < xs.size(); ++i) {
+
+            if (yMax < ys[i]) {
+                yMax = ys[i];
+            }
+
+            // création de tranches
+            if (i < xs.size() - 1) {
+
+                Slice<double> s;
+                s.x1 = xs[i];
+                s.x2 = xs[i+1];
+                s.A_k = (double)(ys[i+1] + ys[i]) * (xs[i+1] - xs[i]) / 2;
+                s.f_k = [&xs, &ys, i](double x) {
+                    double m = (ys[i + 1] - ys[i]) / (xs[i+1] - xs[i]);
+                    return m * (x - xs[i]) + ys[i];
+                };
+
+                slices.push_back(s);
+            }
+        }
+
+        generator = new RealPointGenerator<double>(a, b, 0, yMax, seed);
+
+        /*
         std::cout << "a: " << this->a << ", b: " << this->b << ", yMax : " << this->yMax << std::endl;
         std::cout << "nSlices: " << this->slices.size() << " : ";
-        for (Part<RealType>& s: this->slices) {
+        for (Slice<double>& s: slices) {
             std::cout << "(" << s.x1 << ", " << s.x2 << ") ";
         }
-        std::cout << std::endl;
+        std::cout << std::endl;*/
     }
 
-    RealType generate() {
+    double generate() const {
 
-        Point<RealType> p;  // point (X,Y) qui sera généré aléatoirement
+        Point<double> p;  // point (X,Y) qui sera généré aléatoirement
         size_t sliceIndex;  // indice de la "tranche" dans laquelle X se trouvera"
 
         do {
             // génération du point (X,Y)
-            p = this->generator->next();
+            p = generator->next();
 
             // on cherche le morceau de dans laquelle X se trouve
             sliceIndex = findPart(p.x);
 
-            //std::cout << "X = " << p.x << ", Y = " << p.y << ", sliceIndex = " << sliceIndex << ", f(X) = " << slices[sliceIndex].f(p.x) << std::endl;
-
-            // rejet si Y est > que f(X), avec f la fonction affine associée à la tranche
-        } while (p.y > this->slices[sliceIndex].f(p.x));
+            // rejet si Y est > que f(X), avec f_k la fonction affine associée à la tranche k
+        } while (p.y > slices[sliceIndex].f_k(p.x));
 
         return p.x;
+    }
+
+    ~HitOrMiss() {
+        delete generator;
     }
 
 private:
@@ -57,9 +90,9 @@ private:
      * \param x l'abscisse dont on veut connaître l'intervalle.
      * \return l'indice du morceau dans lequel x se trouve.
      */
-    size_t findPart(RealType x) {
+    size_t findPart(double x) const {
 
-        size_t first = 0, last = this->slices.size() - 1; // indices des tranches à prendre en compte
+        size_t first = 0, last = slices.size() - 1; // indices des tranches à prendre en compte
 
         while (true) {
 
@@ -70,7 +103,7 @@ private:
 
             // on regarde si x est dans la première ou deuxième moitié de l'intervalle de recherche
             size_t mid = (last-first)/2 + first;
-            if (x < this->slices[mid].x2) {   // première moitié
+            if (x < slices[mid].x2) {   // première moitié
                 last = mid;
             } else {                    // deuxième moitié
                 first = mid+1;
