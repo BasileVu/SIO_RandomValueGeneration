@@ -5,6 +5,7 @@
 #include <iostream>
 #include <algorithm>
 
+#include "RandomValueGenerator.h"
 #include "PointGenerator.h"
 #include "Checker.h"
 #include "Slice.h"
@@ -13,52 +14,19 @@
  * Classe utilisant une methode bete et mechante d'acceptation-rejet afin de générer des
  * réalisations de variable aléatoires.
  */
-class HitOrMiss {
+class HitOrMiss : public RandomValueGenerator<double> {
 private:
-    const std::vector<double>& xs;
-    const std::vector<double>& ys;
-    RealPointGenerator<double>* generator;
+    RealPointGenerator<double>* pointGenerator;
     double a, b, yMax = 0;
-    std::vector<Slice<double>> slices;
 public:
 
     HitOrMiss(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed) noexcept(false)
-            : xs(xs), ys(ys) {
+            : RandomValueGenerator<double>(xs, ys) {
 
         a = xs.front(), b = xs.back();
-        slices.reserve(xs.size());
+        yMax = *std::max_element(ys.begin(), ys.end());
 
-        for (size_t i = 0; i < xs.size(); ++i) {
-
-            if (yMax < ys[i]) {
-                yMax = ys[i];
-            }
-
-            // création de tranches
-            if (i < xs.size() - 1) {
-
-                Slice<double> s;
-                s.x1 = xs[i];
-                s.x2 = xs[i+1];
-                s.A_k = (double)(ys[i+1] + ys[i]) * (xs[i+1] - xs[i]) / 2;
-                s.f_k = [&xs, &ys, i](double x) {
-                    double m = (ys[i + 1] - ys[i]) / (xs[i+1] - xs[i]);
-                    return m * (x - xs[i]) + ys[i];
-                };
-
-                slices.push_back(s);
-            }
-        }
-
-        generator = new RealPointGenerator<double>(seed);
-
-        /*
-        std::cout << "a: " << this->a << ", b: " << this->b << ", yMax : " << this->yMax << std::endl;
-        std::cout << "nSlices: " << this->slices.size() << " : ";
-        for (Slice<double>& s: slices) {
-            std::cout << "(" << s.x1 << ", " << s.x2 << ") ";
-        }
-        std::cout << std::endl;*/
+        pointGenerator = new RealPointGenerator<double>(seed);
     }
 
     double generate() const {
@@ -68,7 +36,7 @@ public:
 
         do {
             // génération du point (X,Y)
-            p = generator->next(a, b, 0, yMax);
+            p = pointGenerator->next(a, b, 0, yMax);
 
             // on cherche le morceau de dans laquelle X se trouve
             sliceIndex = findPart(p.x);
@@ -80,7 +48,7 @@ public:
     }
 
     ~HitOrMiss() {
-        delete generator;
+        delete pointGenerator;
     }
 
 private:
