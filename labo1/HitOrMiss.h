@@ -25,7 +25,6 @@ public:
 
         a = xs.front(), b = xs.back();
         yMax = *std::max_element(ys.begin(), ys.end());
-
         pointGenerator = new RealPointGenerator<double>(seed);
     }
 
@@ -36,7 +35,7 @@ public:
 
         do {
             // génération du point (X,Y)
-            p = pointGenerator->next(a, b, 0, yMax);
+            p = pointGenerator->generate(a, b, 0, yMax);
 
             // on cherche le morceau lié à l'intervalle dans laquelle X se trouve
             sliceIndex = findPart(p.x);

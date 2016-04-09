@@ -16,7 +16,7 @@ public:
         generator.setSeed(seed);
     }
 
-    Point<RealType> next(RealType xMin, RealType xMax, RealType yMin, RealType yMax) {
+    Point<RealType> generate(RealType xMin, RealType xMax, RealType yMin, RealType yMax) {
         return {generator.next() * (xMax - xMin) + xMin, generator.next() * (yMax - yMin) + yMin};
     }
 };

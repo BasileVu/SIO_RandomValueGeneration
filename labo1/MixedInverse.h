@@ -11,35 +11,13 @@ class MixedInverse : public RandomValueGenerator<double> {
 private:
     UniformRealGenerator<double>* generator;
 
-    std::vector<double> F_parts; // "bouts" de la fonction de répartition; F_parts[i] = F_parts[i-1] + pks[i]
 public:
 
-    MixedInverse(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed) noexcept(false)
+    MixedInverse(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
             : RandomValueGenerator<double>(xs, ys) {
 
         generator = new UniformRealGenerator<double>(0, 1);
         generator->setSeed(seed);
-
-        // création de tranches
-        double A = 0; // aire totale
-        for (const Slice<double>& s : slices) {
-            A += s.A_k;
-        }
-
-        // création des pk
-        std::vector<double> pks;
-        pks.reserve(xs.size()-1);
-        for (size_t i = 0; i < xs.size()-1; ++i) {
-            pks.push_back(slices[i].A_k/A);
-        }
-
-        // préparation des parties de F
-        F_parts.resize(xs.size());
-        F_parts[0] = 0; // F_0 : premiere partie de la fonction de répartition -> 0 avant xs[0]
-
-        for (size_t i = 1; i < F_parts.size(); ++i) {
-            F_parts[i] = F_parts[i-1] + pks[i-1];
-        }
     }
 
     double generate() const {

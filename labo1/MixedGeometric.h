@@ -1,46 +1,26 @@
-#ifndef LABO1_MIXEDGEOMETRIC_H
-#define LABO1_MIXEDGEOMETRIC_H
+#ifndef MIXEDGEOMETRIC_H
+#define MIXEDGEOMETRIC_H
 
 #include "PointGenerator.h"
 #include "UniformGenerator.h"
 
+/**
+ *
+ */
 class MixedGeometric : public RandomValueGenerator<double> {
 private:
     UniformRealGenerator<double>* generator;
     RealPointGenerator<double>* pointGenerator;
 
-    std::vector<double> F_parts; // "bouts" de la fonction de répartition; F_parts[i] = F_parts[i-1] + pks[i]
-
 public:
 
-    MixedGeometric(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed) noexcept(false)
+    MixedGeometric(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
             : RandomValueGenerator<double>(xs, ys) {
 
         generator = new UniformRealGenerator<double>(0, 1);
         generator->setSeed(seed);
 
         pointGenerator = new RealPointGenerator<double>(seed);
-
-        // création de tranches
-        double A = 0; // aire totale
-        for (const Slice<double>& s : slices) {
-            A += s.A_k;
-        }
-
-        // création des pk
-        std::vector<double> pks;
-        pks.reserve(xs.size()-1);
-        for (size_t i = 0; i < xs.size()-1; ++i) {
-            pks.push_back(slices[i].A_k/A);
-        }
-
-        // préparation des parties de F
-        F_parts.resize(xs.size());
-        F_parts[0] = 0; // F_0 : premiere partie de la fonction de répartition -> 0 avant xs[0]
-
-        for (size_t i = 1; i < F_parts.size(); ++i) {
-            F_parts[i] = F_parts[i-1] + pks[i-1];
-        }
     }
 
     double generate() const {
@@ -53,7 +33,7 @@ public:
         // Ensuite, on génère une réalisation d'une variable de densité f_K en acceptant à tous les coups X.
         Slice<double> s = slices[K];
 
-        Point<double> p = pointGenerator->next(s.p1.x, s.p2.x, 0, std::max(s.p1.y, s.p2.y));
+        Point<double> p = pointGenerator->generate(s.p1.x, s.p2.x, 0, std::max(s.p1.y, s.p2.y));
 
         // Si Y est sous f_k, ok, on retourne X. Sinon, on applique une symétrie à X et on le retourne.
         if (p.y <= s.f_k(p.x)) {
@@ -85,4 +65,4 @@ private:
     }
 };
 
-#endif //LABO1_MIXEDGEOMETRIC_H
+#endif // MIXEDGEOMETRIC_H
