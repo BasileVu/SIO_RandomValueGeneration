@@ -62,7 +62,7 @@ public:
             return s.x1 + U*(s.x2 - s.x1);
         } else {
             double m = (y2 - y1)/(s.x2 - s.x1);
-            return s.x1 + (sqrt( (y2*y2 - y1*y1) * U + y1*y1) - y1) / m;
+            return s.x1 + (sqrt( (y2*y2 - y1*y1) * U + y1*y1 ) - y1) / m;
         }
     }
 
