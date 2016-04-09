@@ -50,7 +50,7 @@ public:
             }
         }
 
-        generator = new RealPointGenerator<double>(a, b, 0, yMax, seed);
+        generator = new RealPointGenerator<double>(seed);
 
         /*
         std::cout << "a: " << this->a << ", b: " << this->b << ", yMax : " << this->yMax << std::endl;
@@ -68,7 +68,7 @@ public:
 
         do {
             // génération du point (X,Y)
-            p = generator->next();
+            p = generator->next(a, b, 0, yMax);
 
             // on cherche le morceau de dans laquelle X se trouve
             sliceIndex = findPart(p.x);

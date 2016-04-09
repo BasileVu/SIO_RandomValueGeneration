@@ -11,6 +11,7 @@ private:
     const std::seed_seq& seed;
 
     UniformRealGenerator<double>* generator;
+    RealPointGenerator<double>* pointGenerator;
     std::vector<Slice<double>> slices;
 
     std::vector<double> F_parts; // "bouts" de la fonction de répartition; F_parts[i] = F_parts[i-1] + pks[i]
@@ -21,6 +22,8 @@ public:
 
         generator = new UniformRealGenerator<double>(0, 1);
         generator->setSeed(seed);
+
+        pointGenerator = new RealPointGenerator<double>(seed);
 
         // création de tranches
         double A = 0; // aire totale
@@ -58,12 +61,13 @@ public:
             F_parts[i] = F_parts[i-1] + pks[i-1];
         }
 
+        /*
         std::cout << "A: " << A << std::endl;
         std::cout << "nSlices: " << this->slices.size() << " : ";
         for (Slice<double>& s: slices) {
             std::cout << "(" << s.x1 << ", " << s.x2 << "), pk = " << s.A_k/A << " ";
         }
-        std::cout << std::endl;
+        std::cout << std::endl;*/
     }
 
     double generate() const {
@@ -72,11 +76,11 @@ public:
         // K représente l'indice de l'intervalle sélectionné.
         size_t K = generateK();
 
+
         // Ensuite, on génère une réalisation d'une variable de densité f_K en acceptant à tous les coups X.
         Slice<double> s = slices[K];
-        RealPointGenerator<double> pointGenerator(s.x1, s.x2, 0, std::max(s.f_k(s.x1), s.f_k(s.x2)), seed);
 
-        Point<double> p = pointGenerator.next();
+        Point<double> p = pointGenerator->next(s.x1, s.x2, 0, std::max(s.f_k(s.x1), s.f_k(s.x2)));
 
         // Si Y est sous f_k, ok, on retourne X. Sinon, on applique une symétrie à X et on le retourne.
         if (p.y <= s.f_k(p.x)) {
@@ -88,6 +92,7 @@ public:
 
     ~MixedGeometric() {
         delete generator;
+        delete pointGenerator;
     }
 
 private:

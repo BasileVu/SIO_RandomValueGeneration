@@ -22,18 +22,17 @@ int main() {
         MixedInverse minv(xs, ys, seed);
 
         double accHom = 0, accMGeo = 0, accMinv = 0;
-        for (int i = 0; i < 10000; ++i) {
+        for (int i = 0; i < 1000000; ++i) {
             accHom += hom.generate();
             accMGeo += mgeo.generate();
             accMinv += minv.generate();
         }
 
-        cout << "> " << accHom / 10000 << endl;
-        cout << "> " << accMGeo / 10000 << endl;
-        cout << "> " << accMinv / 10000 << endl;
+        cout << "> " << accHom / 1000000 << endl;
+        cout << "> " << accMGeo / 1000000 << endl;
+        cout << "> " << accMinv / 1000000 << endl;
     }
 
-    /*
     {
         cout << "-- Deux triangulaires --" << endl;
         vector<double> xs = {2, 3, 7, 10, 14, 15};
@@ -41,15 +40,18 @@ int main() {
 
         HitOrMiss hom(xs, ys, seed);
         MixedGeometric mgeo(xs, ys, seed);
+        MixedInverse minv(xs, ys, seed);
 
-        double accHom = 0, accMGeo = 0;
-        for (int i = 0; i < 10000; ++i) {
+        double accHom = 0, accMGeo = 0, accMinv = 0;
+        for (int i = 0; i < 1000000; ++i) {
             accHom += hom.generate();
             accMGeo += mgeo.generate();
+            accMinv += minv.generate();
         }
 
-        cout << "> " << accHom / 10000 << endl;
-        cout << "> " << accMGeo / 10000 << endl;
+        cout << "> " << accHom / 1000000 << endl;
+        cout << "> " << accMGeo / 1000000 << endl;
+        cout << "> " << accMinv / 1000000 << endl;
     }
 
     {
@@ -59,15 +61,18 @@ int main() {
 
         HitOrMiss hom(xs, ys, seed);
         MixedGeometric mgeo(xs, ys, seed);
+        MixedInverse minv(xs, ys, seed);
 
-        double accHom = 0, accMGeo = 0;
+        double accHom = 0, accMGeo = 0, accMinv = 0;
         for (int i = 0; i < 1000000; ++i) {
             accHom += hom.generate();
             accMGeo += mgeo.generate();
+            accMinv += minv.generate();
         }
 
         cout << "> " << accHom / 1000000 << endl;
         cout << "> " << accMGeo / 1000000 << endl;
+        cout << "> " << accMinv / 1000000 << endl;
     }
     
     {
@@ -77,16 +82,19 @@ int main() {
 
         HitOrMiss hom(xs, ys, seed);
         MixedGeometric mgeo(xs, ys, seed);
+        MixedInverse minv(xs, ys, seed);
 
-        double accHom = 0, accMGeo = 0;
+        double accHom = 0, accMGeo = 0, accMinv = 0;
         for (int i = 0; i < 1000000; ++i) {
             accHom += hom.generate();
             accMGeo += mgeo.generate();
+            accMinv += minv.generate();
         }
 
         cout << "> " << accHom / 1000000 << endl;
         cout << "> " << accMGeo / 1000000 << endl;
-    }*/
+        cout << "> " << accMinv / 1000000 << endl;
+    }
 
     return EXIT_SUCCESS;
 }

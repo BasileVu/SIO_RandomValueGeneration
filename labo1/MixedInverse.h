@@ -61,12 +61,13 @@ public:
             F_parts[i] = F_parts[i-1] + pks[i-1];
         }
 
+        /*
         std::cout << "A: " << A << std::endl;
         std::cout << "nSlices: " << this->slices.size() << " : ";
         for (Slice<double>& s: slices) {
             std::cout << "(" << s.x1 << ", " << s.x2 << "), pk = " << s.A_k/A << " ";
         }
-        std::cout << std::endl;
+        std::cout << std::endl;*/
     }
 
     double generate() const {

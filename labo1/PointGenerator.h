@@ -8,17 +8,15 @@ template <typename RealType>
 class RealPointGenerator {
 private:
     UniformRealGenerator<RealType> generator;
-    RealType xMin, xMax;
-    RealType yMin, yMax;
 public:
 
-    RealPointGenerator(RealType xMin, RealType xMax, RealType yMin, RealType yMax, const std::seed_seq& seed)
-            : xMin(xMin), xMax(xMax), yMin(yMin), yMax(yMax), generator(UniformRealGenerator<RealType>(0, 1)) {
+    RealPointGenerator(const std::seed_seq& seed)
+            : generator(UniformRealGenerator<RealType>(0, 1)) {
 
         generator.setSeed(seed);
     }
 
-    Point<RealType> next() {
+    Point<RealType> next(RealType xMin, RealType xMax, RealType yMin, RealType yMax) {
         return {generator.next() * (xMax - xMin) + xMin, generator.next() * (yMax - yMin) + yMin};
     }
 };
