@@ -4,21 +4,17 @@
 #include "PointGenerator.h"
 #include "UniformGenerator.h"
 
-class MixedGeometric {
+class MixedGeometric : public RandomValueGenerator<double> {
 private:
-    const std::vector<double>& xs;
-    const std::vector<double>& ys;
-    const std::seed_seq& seed;
-
     UniformRealGenerator<double>* generator;
     RealPointGenerator<double>* pointGenerator;
-    std::vector<Slice<double>> slices;
 
     std::vector<double> F_parts; // "bouts" de la fonction de répartition; F_parts[i] = F_parts[i-1] + pks[i]
+
 public:
 
     MixedGeometric(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed) noexcept(false)
-            : xs(xs), ys(ys), seed(seed) {
+            : RandomValueGenerator<double>(xs, ys) {
 
         generator = new UniformRealGenerator<double>(0, 1);
         generator->setSeed(seed);
@@ -27,23 +23,8 @@ public:
 
         // création de tranches
         double A = 0; // aire totale
-        slices.reserve(xs.size());
-        for (size_t i = 0; i < xs.size(); ++i) {
-
-            if (i < xs.size() - 1) {
-
-                Slice<double> s;
-                s.x1 = xs[i];
-                s.x2 = xs[i+1];
-                s.A_k = (double)(ys[i+1] + ys[i]) * (xs[i+1] - xs[i]) / 2;
-                s.f_k = [&xs, &ys, i, &s](double x) {
-                    double m = (ys[i + 1] - ys[i]) / (xs[i+1] - xs[i]);
-                    return (m * (x - xs[i]) + ys[i]) / s.A_k;
-                };
-
-                slices.push_back(s);
-                A += s.A_k;
-            }
+        for (const Slice<double>& s : slices) {
+            A += s.A_k;
         }
 
         // création des pk
