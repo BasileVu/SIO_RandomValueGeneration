@@ -16,7 +16,7 @@ int main() {
     typedef pair<vector<double>, vector<double>> Dataset;
 
     seed_seq seed = {42, 42, 42};
-    size_t nSim = 100000;
+    size_t nSim = 1000000;
 
     cout << "Format : " << endl;
     cout << "-- <Ensemble de donnees> --" << endl;
@@ -42,9 +42,9 @@ int main() {
         vector<double>& xs = dataSets[i].first;
         vector<double>& ys = dataSets[i].second;
 
-        Benchmarker(HitOrMiss(xs, ys, seed)).run("Acceptation - rejet    ", nSim);
-        Benchmarker(MixedGeometric(xs, ys, seed)).run("Melanges - geometrique ", nSim);
-        Benchmarker(MixedInverse(xs, ys, seed)).run("Melanges - inverses    ", nSim);
+        Benchmarker(HitOrMiss(xs, ys, seed), xs, ys).run("Acceptation - rejet    ", nSim);
+        Benchmarker(MixedGeometric(xs, ys, seed), xs, ys).run("Melanges - geometrique ", nSim);
+        Benchmarker(MixedInverse(xs, ys, seed), xs, ys).run("Melanges - inverses    ", nSim);
         cout << endl;
     }
 
