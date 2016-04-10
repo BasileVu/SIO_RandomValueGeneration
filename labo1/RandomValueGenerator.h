@@ -3,38 +3,39 @@
 
 #include <vector>
 #include "PointGenerator.h"
-#include "Slice.h"
+#include "PiecewiseFunction.h"
 
 template <typename T>
 class RandomValueGenerator {
 protected:
     const std::vector<T>& xs;
     const std::vector<T>& ys;
-    std::vector<Slice<T>> slices;
+    PiecewiseLinearFunction<double> func;
+    std::vector<Piece<T>> pieces;
     double A = 0; // aire totale
     std::vector<double> F_parts; // parties de la fonction de répartition F
 
 public:
     RandomValueGenerator(const std::vector<T>& xs, const std::vector<T>& ys) noexcept(false)
-            : xs(xs), ys(ys) {
+            : xs(xs), ys(ys), func(xs, ys) {
 
         /*if (!Checker<T>::check(xs, ys)) {
             throw std::invalid_argument("Incorrect values");
         }*/
 
-        slices.reserve(xs.size());
+        pieces.reserve(xs.size());
         for (size_t i = 0; i < xs.size(); ++i) {
 
             if (i < xs.size() - 1) {
 
-                Slice<T> s {{xs[i], ys[i]}, {xs[i+1], ys[i+1]}};
+                Piece<T> s {{xs[i], ys[i]}, {xs[i+1], ys[i+1]}};
                 s.A_k = (double)(ys[i+1] + ys[i]) * (xs[i+1] - xs[i]) / 2;
                 s.f_k = [&xs, &ys, i](T x) {
                     T m = (ys[i + 1] - ys[i]) / (xs[i+1] - xs[i]);
                     return m * (x - xs[i]) + ys[i];
                 };
 
-                slices.push_back(s);
+                pieces.push_back(s);
                 A += s.A_k;
             }
         }
@@ -43,7 +44,7 @@ public:
         std::vector<double> pks;
         pks.reserve(xs.size()-1);
         for (size_t i = 0; i < xs.size()-1; ++i) {
-            pks.push_back(slices[i].A_k/A);
+            pks.push_back(pieces[i].A_k/A);
         }
 
         // préparation des parties de F

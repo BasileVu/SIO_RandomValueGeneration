@@ -5,7 +5,7 @@
 #include <cmath>
 
 #include "UniformGenerator.h"
-#include "Slice.h"
+#include "RandomValueGenerator.h"
 
 class MixedInverse : public RandomValueGenerator<double> {
 private:
@@ -27,10 +27,10 @@ public:
         size_t K = generateK();
 
         // Ensuite, on applique la méthode des fonctions inverses.
-        Slice<double> s = slices[K];
+        Piece<double> s = pieces[K];
 
-        double x1 = s.p1.x, x2 = s.p2.x;
-        double y1 = s.p1.y, y2 = s.p2.y;
+        double x1 = s.p0.x, x2 = s.p1.x;
+        double y1 = s.p0.y, y2 = s.p1.y;
 
         double U = generator->next();
 

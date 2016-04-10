@@ -8,7 +8,6 @@
 #include "RandomValueGenerator.h"
 #include "PointGenerator.h"
 #include "Checker.h"
-#include "Slice.h"
 
 /**
  * Classe utilisant une methode bete et mechante d'acceptation-rejet afin de générer des
@@ -41,7 +40,7 @@ public:
             sliceIndex = findPart(p.x);
 
             // rejet si Y est > que f(X), avec f_k la fonction affine associée à la tranche k
-        } while (p.y > slices[sliceIndex].f_k(p.x));
+        } while (p.y > pieces[sliceIndex].f_k(p.x));
 
         return p.x;
     }
@@ -59,7 +58,7 @@ private:
      */
     size_t findPart(double x) const {
 
-        size_t first = 0, last = slices.size() - 1; // indices des tranches à prendre en compte
+        size_t first = 0, last = pieces.size() - 1; // indices des tranches à prendre en compte
 
         while (true) {
 
@@ -70,7 +69,7 @@ private:
 
             // on regarde si x est dans la première ou deuxième moitié de l'intervalle de recherche
             size_t mid = (last-first)/2 + first;
-            if (x < slices[mid].p2.x) {   // première moitié
+            if (x < pieces[mid].p1.x) {   // première moitié
                 last = mid;
             } else {                    // deuxième moitié
                 first = mid+1;

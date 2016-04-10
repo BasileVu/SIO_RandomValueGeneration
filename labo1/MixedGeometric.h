@@ -31,15 +31,15 @@ public:
 
 
         // Ensuite, on génère une réalisation d'une variable de densité f_K en acceptant à tous les coups X.
-        Slice<double> s = slices[K];
+        Piece<double> s = pieces[K];
 
-        Point<double> p = pointGenerator->generate(s.p1.x, s.p2.x, 0, std::max(s.p1.y, s.p2.y));
+        Point<double> p = pointGenerator->generate(s.p0.x, s.p1.x, 0, std::max(s.p0.y, s.p1.y));
 
         // Si Y est sous f_k, ok, on retourne X. Sinon, on applique une symétrie à X et on le retourne.
         if (p.y <= s.f_k(p.x)) {
             return p.x;
         } else {
-            return (s.p1.x + (s.p2.x - p.x));
+            return (s.p0.x + (s.p1.x - p.x));
         }
     }
 
