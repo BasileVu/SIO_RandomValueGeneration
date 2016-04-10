@@ -27,20 +27,20 @@ public:
         size_t K = generateK();
 
         // Ensuite, on applique la méthode des fonctions inverses.
-        Piece<double> s = this->func.pieces[K];
+        const Piece<double>& piece = func.pieces[K];
 
-        double x1 = s.p0.x, x2 = s.p1.x;
-        double y1 = s.p0.y, y2 = s.p1.y;
+        double x0 = piece.p0.x, x1 = piece.p1.x;
+        double y0 = piece.p0.y, y1 = piece.p1.y;
 
         double U = generator->next();
 
-        // Si y1 = y2, alors on est dans le cas d'une uniforme. Sinon, on inverse la fonction de repartition associée
+        // Si y1 = y1, alors on est dans le cas d'une uniforme. Sinon, on inverse la fonction de repartition associée
         // à la fonction f_k.
-        if (y1 == y2) {
-            return x1 + U*(x2 - x1);
+        if (y0 == y1) {
+            return x0 + U*(x1 - x0);
         } else {
-            double m = (y2 - y1)/(x2 - x1);
-            return x1 + (sqrt( (y2*y2 - y1*y1) * U + y1*y1 ) - y1) / m;
+            double m = (y1 - y0)/(x1 - x0);
+            return x0 + (sqrt( (y1*y1 - y0*y0) * U + y0*y0 ) - y0) / m;
         }
     }
 
