@@ -31,7 +31,7 @@ public:
 
 
         // Ensuite, on génère une réalisation d'une variable de densité f_K en acceptant à tous les coups X.
-        Piece<double> s = pieces[K];
+        Piece<double> s = this->func.pieces[K];
 
         Point<double> p = pointGenerator->generate(s.p0.x, s.p1.x, 0, std::max(s.p0.y, s.p1.y));
 

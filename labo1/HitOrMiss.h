@@ -40,7 +40,7 @@ public:
             sliceIndex = findPart(p.x);
 
             // rejet si Y est > que f(X), avec f_k la fonction affine associée à la tranche k
-        } while (p.y > pieces[sliceIndex].f_k(p.x));
+        } while (p.y > func.pieces[sliceIndex].f_k(p.x));
 
         return p.x;
     }
@@ -58,7 +58,7 @@ private:
      */
     size_t findPart(double x) const {
 
-        size_t first = 0, last = pieces.size() - 1; // indices des tranches à prendre en compte
+        size_t first = 0, last = this->func.pieces.size() - 1; // indices des tranches à prendre en compte
 
         while (true) {
 
@@ -69,7 +69,7 @@ private:
 
             // on regarde si x est dans la première ou deuxième moitié de l'intervalle de recherche
             size_t mid = (last-first)/2 + first;
-            if (x < pieces[mid].p1.x) {   // première moitié
+            if (x < this->func.pieces[mid].p1.x) {   // première moitié
                 last = mid;
             } else {                    // deuxième moitié
                 first = mid+1;

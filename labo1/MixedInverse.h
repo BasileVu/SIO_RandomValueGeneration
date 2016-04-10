@@ -27,7 +27,7 @@ public:
         size_t K = generateK();
 
         // Ensuite, on applique la méthode des fonctions inverses.
-        Piece<double> s = pieces[K];
+        Piece<double> s = this->func.pieces[K];
 
         double x1 = s.p0.x, x2 = s.p1.x;
         double y1 = s.p0.y, y2 = s.p1.y;

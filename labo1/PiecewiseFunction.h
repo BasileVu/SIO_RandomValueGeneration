@@ -22,7 +22,7 @@ struct Piece {
 template <typename T>
 struct PiecewiseLinearFunction {
     std::vector<Piece<T>> pieces;   // "morceaux" de la fonction
-    double A;                    // aire totale sous la fonction
+    double A = 0;                   // aire totale sous la fonction
 
     PiecewiseLinearFunction(const std::vector<T>& xs, const std::vector<T>& ys) {
 
