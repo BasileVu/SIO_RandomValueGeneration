@@ -20,6 +20,7 @@ int main() {
 
     cout << "Format : " << endl;
     cout << "-- <Ensemble de donnees> --" << endl;
+    cout << "Esperance theorique: <esperance theorique>" << endl;
     cout << "<Methode> : <esperance empirique>, <temps>s" << endl;
     cout << endl;
 
@@ -38,13 +39,14 @@ int main() {
     };
 
     for (size_t i = 0; i < dataSets.size(); ++i) {
-        cout << "-- " + datasetNames[i] << " --" << endl;
         vector<double>& xs = dataSets[i].first;
         vector<double>& ys = dataSets[i].second;
 
-        Benchmarker(HitOrMiss(xs, ys, seed), xs, ys).run("Acceptation - rejet    ", nSim);
-        Benchmarker(MixedGeometric(xs, ys, seed), xs, ys).run("Melanges - geometrique ", nSim);
-        Benchmarker(MixedInverse(xs, ys, seed), xs, ys).run("Melanges - inverses    ", nSim);
+        cout << "-- " + datasetNames[i] << " --" << endl;
+        cout << " Esperance theorique    : " << TheoricalECalculator<double>::calculate(xs, ys) << endl;
+        Benchmarker(HitOrMiss(xs, ys, seed)).run(" Acceptation - rejet    ", nSim);
+        Benchmarker(MixedGeometric(xs, ys, seed)).run(" Melanges - geometrique ", nSim);
+        Benchmarker(MixedInverse(xs, ys, seed)).run(" Melanges - inverses    ", nSim);
         cout << endl;
     }
 

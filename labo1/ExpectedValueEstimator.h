@@ -1,14 +1,14 @@
-#ifndef EXPECTED_VALUE_ESTIMATOR
-#define EXPECTED_VALUE_ESTIMATOR
+#ifndef EMPIRICAL_E_GENERATOR
+#define EMPIRICAL_E_GENERATOR
 
 #include "RandomValueGenerator.h"
 
 template <typename T, typename ResultType>
-class ExpectedValueEstimator {
+class EmpiricalEGenerator {
     const RandomValueGenerator<T>& generator;
 
 public:
-    ExpectedValueEstimator(const RandomValueGenerator<T>& generator) : generator(generator) {}
+    EmpiricalEGenerator(const RandomValueGenerator<T>& generator) : generator(generator) {}
 
     ResultType generate(size_t nSim) const noexcept(false) {
         if (nSim == 0) {
@@ -24,4 +24,4 @@ public:
     }
 };
 
-#endif // EXPECTED_VALUE_ESTIMATOR
+#endif // EMPIRICAL_E_GENERATOR
