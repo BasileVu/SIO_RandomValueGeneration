@@ -13,8 +13,7 @@ private:
     std::uniform_real_distribution<double> distribution;
 
 public:
-    UniformGenerator(double a, double b)
-            : distribution(std::uniform_real_distribution<double>(a, b)) {}
+    UniformGenerator(double a, double b) : distribution(std::uniform_real_distribution<double>(a, b)) {}
 
     void setSeed(std::seed_seq seed) {
         generator.seed(seed);

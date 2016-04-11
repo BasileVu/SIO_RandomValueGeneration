@@ -7,19 +7,17 @@ class EmpiricalEGenerator {
     const RandomValueGenerator& generator;
 
 public:
-    EmpiricalEGenerator(const RandomValueGenerator& generator) : generator(generator) {}
-
-    double generate(size_t nSim) const noexcept(false) {
-        if (nSim == 0) {
+    static double generate(RandomValueGenerator& generator, size_t nGenValues) noexcept(false) {
+        if (nGenValues == 0) {
             throw std::invalid_argument("Can't generate empirical expected value with 0 simulations");
         }
 
         double acc = 0;
-        for (size_t i = 0; i < nSim; ++i) {
+        for (size_t i = 0; i < nGenValues; ++i) {
             acc += generator.generate();
         }
 
-        return acc / nSim;
+        return acc / nGenValues;
     }
 };
 

@@ -2,7 +2,6 @@
 #define BENCHMARKER_H
 
 #include <ctime>
-#include <string>
 #include <iostream>
 
 #include "PiecewiseFunction.h"
@@ -11,19 +10,11 @@
 #include "RandomValueGenerator.h"
 
 class Benchmarker {
-private:
-    const EmpiricalEGenerator eve;
-
 public:
-    Benchmarker(const RandomValueGenerator& generator)
-            : eve(EmpiricalEGenerator(generator)) {}
-
-    void run(const std::string& name, size_t nSim) {
+    static double run(RandomValueGenerator& generator, size_t nGenValues) {
         clock_t start = clock();
-        double empiricalEVal = eve.generate(nSim);
-        double timeElapsed = (double)(clock() - start) / CLOCKS_PER_SEC;
-
-        std::cout << name << ": " << empiricalEVal << ", " << timeElapsed << "s" << std::endl;
+        EmpiricalEGenerator::generate(generator, nGenValues);
+        return (double)(clock() - start) / CLOCKS_PER_SEC;
     }
 };
 

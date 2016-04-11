@@ -9,9 +9,7 @@ private:
     UniformGenerator generator;
 public:
 
-    PointGenerator(const std::seed_seq& seed)
-            : generator(UniformGenerator(0, 1)) {
-
+    PointGenerator(const std::seed_seq& seed) : generator(UniformGenerator(0, 1)) {
         generator.setSeed(seed);
     }
 
