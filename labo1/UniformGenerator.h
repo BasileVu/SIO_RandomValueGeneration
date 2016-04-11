@@ -6,22 +6,21 @@
 /**
  * Generates numbers using the uniform distribution.
  */
-template <typename RealType>
-class UniformRealGenerator {
+class UniformGenerator {
 
 private:
     std::mt19937_64 generator;
-    std::uniform_real_distribution<RealType> distribution;
+    std::uniform_real_distribution<double> distribution;
 
 public:
-    UniformRealGenerator(RealType a, RealType b)
-            : distribution(std::uniform_real_distribution<RealType>(a, b)) {}
+    UniformGenerator(double a, double b)
+            : distribution(std::uniform_real_distribution<double>(a, b)) {}
 
     void setSeed(std::seed_seq seed) {
         generator.seed(seed);
     }
 
-    RealType next() {
+    double next() {
         return distribution(generator);
     }
 };

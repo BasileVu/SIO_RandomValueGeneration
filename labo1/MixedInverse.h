@@ -1,5 +1,5 @@
-#ifndef LABO1_MIXEDINVERSE_H
-#define LABO1_MIXEDINVERSE_H
+#ifndef MIXEDINVERSE_H
+#define MIXEDINVERSE_H
 
 #include <vector>
 #include <cmath>
@@ -9,14 +9,14 @@
 
 class MixedInverse : public RandomValueGenerator {
 private:
-    UniformRealGenerator<double>* generator;
+    UniformGenerator* generator;
 
 public:
 
     MixedInverse(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
             : RandomValueGenerator(xs, ys) {
 
-        generator = new UniformRealGenerator<double>(0, 1);
+        generator = new UniformGenerator(0, 1);
         generator->setSeed(seed);
     }
 
@@ -65,4 +65,4 @@ private:
     }
 };
 
-#endif //LABO1_MIXEDINVERSE_H
+#endif // MIXEDINVERSE_H

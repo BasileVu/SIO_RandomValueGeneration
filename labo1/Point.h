@@ -1,8 +1,8 @@
-#ifndef LABO1_POINT_H
-#define LABO1_POINT_H
+#ifndef POINT_H
+#define POINT_H
 
 struct Point {
     double x, y;
 };
 
-#endif //LABO1_POINT_H
+#endif // POINT_H

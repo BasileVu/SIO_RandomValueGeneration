@@ -1,16 +1,16 @@
-#ifndef LABO1_POINTGENERATOR_H
-#define LABO1_POINTGENERATOR_H
+#ifndef POINTGENERATOR_H
+#define POINTGENERATOR_H
 
 #include "Point.h"
 #include "UniformGenerator.h"
 
 class PointGenerator {
 private:
-    UniformRealGenerator<double> generator;
+    UniformGenerator generator;
 public:
 
     PointGenerator(const std::seed_seq& seed)
-            : generator(UniformRealGenerator<double>(0, 1)) {
+            : generator(UniformGenerator(0, 1)) {
 
         generator.setSeed(seed);
     }
@@ -20,4 +20,4 @@ public:
     }
 };
 
-#endif //LABO1_POINTGENERATOR_H
+#endif // POINTGENERATOR_H

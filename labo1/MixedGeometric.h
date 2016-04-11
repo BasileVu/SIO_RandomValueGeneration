@@ -9,7 +9,7 @@
  */
 class MixedGeometric : public RandomValueGenerator {
 private:
-    UniformRealGenerator<double>* generator;
+    UniformGenerator* generator;
     PointGenerator* pointGenerator;
 
 public:
@@ -17,7 +17,7 @@ public:
     MixedGeometric(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
             : RandomValueGenerator(xs, ys) {
 
-        generator = new UniformRealGenerator<double>(0, 1);
+        generator = new UniformGenerator(0, 1);
         generator->setSeed(seed);
 
         pointGenerator = new PointGenerator(seed);
