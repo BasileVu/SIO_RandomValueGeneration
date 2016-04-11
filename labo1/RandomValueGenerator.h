@@ -2,22 +2,23 @@
 #define RANDOM_VALUE_GENERATOR_H
 
 #include <vector>
+#include "Checker.h"
 #include "PointGenerator.h"
 #include "PiecewiseFunction.h"
 
-template <typename T>
 class RandomValueGenerator {
 protected:
-    PiecewiseLinearFunction<double> func;
+    PiecewiseLinearFunction func;
     std::vector<double> F_parts; // parties de la fonction de répartition F
 
 public:
-    RandomValueGenerator(const std::vector<T>& xs, const std::vector<T>& ys) noexcept(false)
+    RandomValueGenerator(const std::vector<double>& xs, const std::vector<double>& ys) noexcept(false)
             : func(xs, ys) {
 
-        /*if (!Checker<T>::check(xs, ys)) {
-            throw std::invalid_argument("Incorrect values");
-        }*/
+        // verification de la validité des données
+        if (!Checker::check(xs, ys)) {
+            throw std::invalid_argument("Les donnees ne sont pas valides.");
+        }
 
         // création des pk
         std::vector<double> pks;
@@ -35,7 +36,7 @@ public:
         }
     }
 
-    virtual T generate() const = 0;
+    virtual double generate() const = 0;
 };
 
 #endif // RANDOM_VALUE_GENERATOR_H

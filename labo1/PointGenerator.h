@@ -4,19 +4,18 @@
 #include "Point.h"
 #include "UniformGenerator.h"
 
-template <typename RealType>
-class RealPointGenerator {
+class PointGenerator {
 private:
-    UniformRealGenerator<RealType> generator;
+    UniformRealGenerator<double> generator;
 public:
 
-    RealPointGenerator(const std::seed_seq& seed)
-            : generator(UniformRealGenerator<RealType>(0, 1)) {
+    PointGenerator(const std::seed_seq& seed)
+            : generator(UniformRealGenerator<double>(0, 1)) {
 
         generator.setSeed(seed);
     }
 
-    Point<RealType> generate(RealType xMin, RealType xMax, RealType yMin, RealType yMax) {
+    Point generate(double xMin, double xMax, double yMin, double yMax) {
         return {generator.next() * (xMax - xMin) + xMin, generator.next() * (yMax - yMin) + yMin};
     }
 };

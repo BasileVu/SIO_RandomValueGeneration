@@ -12,13 +12,13 @@
 
 class Benchmarker {
 private:
-    const EmpiricalEGenerator<double> eve;
+    const EmpiricalEGenerator eve;
 
 public:
-    Benchmarker(const RandomValueGenerator<double>& generator)
-            : eve(EmpiricalEGenerator<double>(generator)) {}
+    Benchmarker(const RandomValueGenerator& generator)
+            : eve(EmpiricalEGenerator(generator)) {}
 
-    void run(const std::string& name, size_t nSim) const noexcept(false) {
+    void run(const std::string& name, size_t nSim) {
         clock_t start = clock();
         double empiricalEVal = eve.generate(nSim);
         double timeElapsed = (double)(clock() - start) / CLOCKS_PER_SEC;

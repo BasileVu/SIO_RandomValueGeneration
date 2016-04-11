@@ -7,29 +7,28 @@
 
 #include "RandomValueGenerator.h"
 #include "PointGenerator.h"
-#include "Checker.h"
 
 /**
  * Classe utilisant une methode bete et mechante d'acceptation-rejet afin de générer des
  * réalisations de variable aléatoires.
  */
-class HitOrMiss : public RandomValueGenerator<double> {
+class HitOrMiss : public RandomValueGenerator {
 private:
-    RealPointGenerator<double>* pointGenerator;
+    PointGenerator* pointGenerator;
     double a, b, yMax = 0;
 public:
 
-    HitOrMiss(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed) noexcept(false)
-            : RandomValueGenerator<double>(xs, ys) {
+    HitOrMiss(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
+            : RandomValueGenerator(xs, ys) {
 
         a = xs.front(), b = xs.back();
         yMax = *std::max_element(ys.begin(), ys.end());
-        pointGenerator = new RealPointGenerator<double>(seed);
+        pointGenerator = new PointGenerator(seed);
     }
 
     double generate() const {
 
-        Point<double> p;  // point (X,Y) qui sera généré aléatoirement
+        Point p;  // point (X,Y) qui sera généré aléatoirement
         size_t sliceIndex;  // indice de la "tranche" dans laquelle X se trouvera"
 
         do {

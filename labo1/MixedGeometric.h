@@ -7,20 +7,20 @@
 /**
  *
  */
-class MixedGeometric : public RandomValueGenerator<double> {
+class MixedGeometric : public RandomValueGenerator {
 private:
     UniformRealGenerator<double>* generator;
-    RealPointGenerator<double>* pointGenerator;
+    PointGenerator* pointGenerator;
 
 public:
 
     MixedGeometric(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
-            : RandomValueGenerator<double>(xs, ys) {
+            : RandomValueGenerator(xs, ys) {
 
         generator = new UniformRealGenerator<double>(0, 1);
         generator->setSeed(seed);
 
-        pointGenerator = new RealPointGenerator<double>(seed);
+        pointGenerator = new PointGenerator(seed);
     }
 
     double generate() const {
@@ -31,9 +31,9 @@ public:
 
 
         // Ensuite, on génère une réalisation d'une variable de densité f_K en acceptant à tous les coups X.
-        const Piece<double>& piece = func.pieces[K];
+        const Piece& piece = func.pieces[K];
 
-        Point<double> p = pointGenerator->generate(piece.p0.x, piece.p1.x, 0, std::max(piece.p0.y, piece.p1.y));
+        Point p = pointGenerator->generate(piece.p0.x, piece.p1.x, 0, std::max(piece.p0.y, piece.p1.y));
 
         // Si Y est sous f_k, ok, on retourne X. Sinon, on applique une symétrie à X et on le retourne.
         if (p.y <= piece.f_k(p.x)) {

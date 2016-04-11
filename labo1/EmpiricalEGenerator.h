@@ -3,19 +3,18 @@
 
 #include "RandomValueGenerator.h"
 
-template <typename T>
 class EmpiricalEGenerator {
-    const RandomValueGenerator<T>& generator;
+    const RandomValueGenerator& generator;
 
 public:
-    EmpiricalEGenerator(const RandomValueGenerator<T>& generator) : generator(generator) {}
+    EmpiricalEGenerator(const RandomValueGenerator& generator) : generator(generator) {}
 
-    T generate(size_t nSim) const noexcept(false) {
+    double generate(size_t nSim) const noexcept(false) {
         if (nSim == 0) {
             throw std::invalid_argument("Can't generate empirical expected value with 0 simulations");
         }
 
-        T acc = 0;
+        double acc = 0;
         for (size_t i = 0; i < nSim; ++i) {
             acc += generator.generate();
         }

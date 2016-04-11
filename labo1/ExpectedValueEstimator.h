@@ -3,12 +3,11 @@
 
 #include "RandomValueGenerator.h"
 
-template <typename T, typename ResultType>
 class EmpiricalEGenerator {
-    const RandomValueGenerator<T>& generator;
+    const RandomValueGenerator& generator;
 
 public:
-    EmpiricalEGenerator(const RandomValueGenerator<T>& generator) : generator(generator) {}
+    EmpiricalEGenerator(const RandomValueGenerator& generator) : generator(generator) {}
 
     ResultType generate(size_t nSim) const noexcept(false) {
         if (nSim == 0) {

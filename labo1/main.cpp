@@ -25,7 +25,7 @@ int main() {
     cout << endl;
 
     vector<Dataset> dataSets = {
-            {{5, 15}, {1,1}},
+            {{5, 15}, {1, 1}},
             {{2, 3, 7, 10, 14, 15}, {0, 1, 0, 0, 1, 0}},
             {{2, 4, 7, 9, 12, 13, 17, 20}, {8, 10, 10, 9, 5, 9, 10, 6}},
             {{2, 3, 5, 10, 12, 13, 15, 17, 19, 20}, {1, 10, 0, 1, 8, 4, 1, 0, 2, 9}}
@@ -43,7 +43,7 @@ int main() {
         vector<double>& ys = dataSets[i].second;
 
         cout << "-- " + datasetNames[i] << " --" << endl;
-        cout << " Esperance theorique    : " << TheoricalECalculator<double>::calculate(xs, ys) << endl;
+        cout << " Esperance theorique    : " << TheoricalECalculator::calculate(xs, ys) << endl;
         Benchmarker(HitOrMiss(xs, ys, seed)).run(" Acceptation - rejet    ", nSim);
         Benchmarker(MixedGeometric(xs, ys, seed)).run(" Melanges - geometrique ", nSim);
         Benchmarker(MixedInverse(xs, ys, seed)).run(" Melanges - inverses    ", nSim);

@@ -7,14 +7,14 @@
 #include "UniformGenerator.h"
 #include "RandomValueGenerator.h"
 
-class MixedInverse : public RandomValueGenerator<double> {
+class MixedInverse : public RandomValueGenerator {
 private:
     UniformRealGenerator<double>* generator;
 
 public:
 
     MixedInverse(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
-            : RandomValueGenerator<double>(xs, ys) {
+            : RandomValueGenerator(xs, ys) {
 
         generator = new UniformRealGenerator<double>(0, 1);
         generator->setSeed(seed);
@@ -27,7 +27,7 @@ public:
         size_t K = generateK();
 
         // Ensuite, on applique la méthode des fonctions inverses.
-        const Piece<double>& piece = func.pieces[K];
+        const Piece& piece = func.pieces[K];
 
         double x0 = piece.p0.x, x1 = piece.p1.x;
         double y0 = piece.p0.y, y1 = piece.p1.y;
