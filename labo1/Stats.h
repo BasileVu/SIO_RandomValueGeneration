@@ -24,30 +24,24 @@ public:
         return values;
     }
 
-    static double mean(const std::vector<double>& values) {
-        double sum = std::accumulate(values.begin(), values.end(), 0.0);
-        return sum / values.size();
-    }
-
-    static double var(const std::vector<double>& values) {
+    static double sampleVar(const std::vector<double>& values) {
         // V(X) = ((somme de i = 1 à n (x_i ^ 2)) / n) - moyenne^2
 
-        double var = 0;
-        double mean = 0;
+        double sum = 0;
+        double m = mean(values);
+
         for (const double& d : values) {
-            var += d*d;
-            mean += d;
+            double item = d - m;
+            sum += item * item;
         }
-        mean /= values.size();
-        var /= values.size();
-        return var - mean*mean;
+        return sum / (values.size() - 1);
     }
 
-    static double stdDev(const std::vector<double>& values) {
-        return std::sqrt(var(values));
+    static double sampleStdDev(const std::vector<double>& values) {
+        return std::sqrt(sampleVar(values));
     }
 
-    static double theoricalEVal(const std::vector<double>& xs, const std::vector<double>& ys) {
+    static double expectedValue(const std::vector<double>& xs, const std::vector<double>& ys) {
         PiecewiseLinearFunction func(xs, ys);
         double res = 0;
         for (const Piece& p : func.pieces) {
@@ -62,8 +56,8 @@ public:
         return res / func.A;
     }
 
-    static double empiricalEVal(RandomValueGenerator& generator, size_t nValues) {
-        return mean(generateNValues(generator, nValues));
+    static double mean(const std::vector<double>& values) {
+        return std::accumulate(values.begin(), values.end(), 0.0) / values.size();
     }
 };
 

@@ -4,8 +4,8 @@
 #include <string>
 
 #include "HitOrMiss.h"
-#include "MixedGeometric.h"
-#include "MixedInverse.h"
+#include "Geometric.h"
+#include "Inverse.h"
 #include "Benchmarker.h"
 #include "Stats.h"
 
@@ -18,7 +18,11 @@ struct Dataset {
 
 void test(const string& name, RandomValueGenerator& generator, size_t nGenValues, size_t nIntervals) {
     cout << " " << name << "(" << nGenValues << ") :" << endl;
-    cout << "  " << Stats::empiricalEVal(generator, nGenValues) << endl;
+
+    std::vector<double> values = Stats::generateNValues(generator, nGenValues);
+
+    cout << "  " << Stats::mean(values) << endl;
+    cout << "  " << Stats::sampleStdDev(values) << endl;
 
     double meanTime = 0;
     for (size_t i = 0; i < nIntervals; ++i) {
@@ -38,6 +42,7 @@ int main() {
     cout << "Esperance theorique: <esperance theorique>" << endl;
     cout << "<Methode> (<nombre de generations>):" << endl;
     cout << " <esperance empirique>" << endl;
+    cout << " <ecart-type empirique>" << endl;
     cout << " <moyenne des temps>s" << endl;
     cout << endl;
 
@@ -53,16 +58,16 @@ int main() {
         const vector<double>& ys = dataset.values.second;
 
         cout << "-- " + dataset.name << " --" << endl;
-        cout << " Esperance theorique    : " << Stats::theoricalEVal(xs, ys) << endl;
+        cout << " Esperance theorique    : " << Stats::expectedValue(xs, ys) << endl;
 
         HitOrMiss hom(xs, ys, seed);
-        MixedGeometric mgeo(xs, ys, seed);
-        MixedInverse minv(xs, ys, seed);
+        Geometric geo(xs, ys, seed);
+        InverseFunctions inv(xs, ys, seed);
 
 
         test("Acceptation - rejet   ", hom, nGenValues, nIntervals);
-        test("Melanges - geometrique", mgeo, nGenValues, nIntervals);
-        test("Melanges - inverses   ", minv, nGenValues, nIntervals);
+        test("Melanges - geometrique", geo, nGenValues, nIntervals);
+        test("Melanges - inverses   ", inv, nGenValues, nIntervals);
         cout << endl;
     }
 

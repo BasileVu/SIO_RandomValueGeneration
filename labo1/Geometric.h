@@ -1,23 +1,26 @@
-#ifndef MIXEDINVERSE_H
-#define MIXEDINVERSE_H
+#ifndef GEOMETRIC_H
+#define GEOMETRIC_H
 
-#include <vector>
-#include <cmath>
-
+#include "PointGenerator.h"
 #include "UniformGenerator.h"
-#include "RandomValueGenerator.h"
 
-class MixedInverse : public RandomValueGenerator {
+/**
+ *
+ */
+class Geometric : public RandomValueGenerator {
 private:
     UniformGenerator* generator;
+    PointGenerator* pointGenerator;
 
 public:
 
-    MixedInverse(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
+    Geometric(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
             : RandomValueGenerator(xs, ys) {
 
         generator = new UniformGenerator(0, 1);
         generator->setSeed(seed);
+
+        pointGenerator = new PointGenerator(seed);
     }
 
     double generate() const {
@@ -26,26 +29,23 @@ public:
         // K représente l'indice de l'intervalle sélectionné.
         size_t K = generateK();
 
-        // Ensuite, on applique la méthode des fonctions inverses.
+
+        // Ensuite, on génère une réalisation d'une variable de densité f_K en acceptant à tous les coups X.
         const Piece& piece = func.pieces[K];
 
-        double x0 = piece.p0.x, x1 = piece.p1.x;
-        double y0 = piece.p0.y, y1 = piece.p1.y;
+        Point p = pointGenerator->generate(piece.p0.x, piece.p1.x, 0, std::max(piece.p0.y, piece.p1.y));
 
-        double U = generator->next();
-
-        // Si y1 = y1, alors on est dans le cas d'une uniforme. Sinon, on inverse la fonction de repartition associée
-        // à la fonction f_k.
-        if (y0 == y1) {
-            return x0 + U*(x1 - x0);
+        // Si Y est sous f_k, ok, on retourne X. Sinon, on applique une symétrie à X et on le retourne.
+        if (p.y <= piece.f_k(p.x)) {
+            return p.x;
         } else {
-            double m = (y1 - y0)/(x1 - x0);
-            return x0 + (sqrt( (y1*y1 - y0*y0) * U + y0*y0 ) - y0) / m;
+            return (piece.p0.x + (piece.p1.x - p.x));
         }
     }
 
-    ~MixedInverse() {
+    ~Geometric() {
         delete generator;
+        delete pointGenerator;
     }
 
 private:
@@ -65,4 +65,4 @@ private:
     }
 };
 
-#endif // MIXEDINVERSE_H
+#endif // GEOMETRIC_H

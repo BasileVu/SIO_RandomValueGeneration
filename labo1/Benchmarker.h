@@ -5,14 +5,14 @@
 #include <iostream>
 
 #include "PiecewiseFunction.h"
-#include "EmpiricalEGenerator.h"
+#include "Stats.h"
 #include "RandomValueGenerator.h"
 
 class Benchmarker {
 public:
     static double run(RandomValueGenerator& generator, size_t nGenValues) {
         clock_t start = clock();
-        EmpiricalEGenerator::generate(generator, nGenValues);
+        Stats::mean(Stats::generateNValues(generator, nGenValues));
         return (double)(clock() - start) / CLOCKS_PER_SEC;
     }
 };
