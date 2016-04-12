@@ -24,6 +24,9 @@ void test(const string& name, RandomValueGenerator& generator, size_t nGenValues
     cout << "  " << Stats::mean(values) << endl;
     cout << "  " << Stats::sampleStdDev(values) << endl;
 
+    std::pair<double, double> ic = Stats::confidenceInterval(values, 1.96);
+    cout << "  [" << ic.first << ", " << ic.second << "]" << endl;
+
     double meanTime = 0;
     for (size_t i = 0; i < nIntervals; ++i) {
         meanTime += Benchmarker::run(generator, nGenValues);

@@ -1,5 +1,5 @@
-#ifndef PIECEWISE_FUNCTION_H
-#define PIECEWISE_FUNCTION_H
+#ifndef PIECEWISE_LINEAR_FUNCTION_H
+#define PIECEWISE_LINEAR_FUNCTION_H
 
 #include <vector>
 #include <functional>
@@ -44,4 +44,4 @@ struct PiecewiseLinearFunction {
 
 };
 
-#endif // PIECEWISE_FUNCTION_H
+#endif // PIECEWISE_LINEAR_FUNCTION_H

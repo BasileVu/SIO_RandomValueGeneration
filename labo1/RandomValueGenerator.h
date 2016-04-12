@@ -4,7 +4,7 @@
 #include <vector>
 #include "Checker.h"
 #include "PointGenerator.h"
-#include "PiecewiseFunction.h"
+#include "PiecewiseLinearFunction.h"
 
 class RandomValueGenerator {
 protected:

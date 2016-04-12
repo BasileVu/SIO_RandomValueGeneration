@@ -4,7 +4,7 @@
 #include <ctime>
 #include <iostream>
 
-#include "PiecewiseFunction.h"
+#include "PiecewiseLinearFunction.h"
 #include "Stats.h"
 #include "RandomValueGenerator.h"
 

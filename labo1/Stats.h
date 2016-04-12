@@ -3,17 +3,13 @@
 
 #include <vector>
 
-#include "PiecewiseFunction.h"
+#include "PiecewiseLinearFunction.h"
 #include "RandomValueGenerator.h"
 
 class Stats {
 public:
 
     static std::vector<double> generateNValues(RandomValueGenerator& generator, size_t nValues) {
-        if (nValues < 0) {
-            throw std::invalid_argument("Cannot generate a negative number of values");
-        }
-
         std::vector<double> values;
         values.reserve(nValues);
 
@@ -59,6 +55,12 @@ public:
     static double mean(const std::vector<double>& values) {
         return std::accumulate(values.begin(), values.end(), 0.0) / values.size();
     }
+
+    static std::pair<double, double> confidenceInterval(const std::vector<double>& values, double quantile) {
+        double m = mean(values);
+        double halfDelta = quantile * (sampleStdDev(values) / std::sqrt(values.size()));
+        return std::make_pair(m - halfDelta, m + halfDelta);
+    };
 };
 
 #endif // STATS_H
