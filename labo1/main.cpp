@@ -16,37 +16,38 @@ struct Dataset {
     pair<vector<double>, vector<double>> values;
 };
 
-void test(const string& name, RandomValueGenerator& generator, size_t nGenValues, size_t nIntervals) {
-    cout << " " << name << "(" << nGenValues << ") :" << endl;
-
+void test(const string& name, RandomValueGenerator& generator, size_t nGenValues, size_t nSims) {
+    std::pair<double, double> ic;
     std::vector<double> values = Stats::generateNValues(generator, nGenValues);
 
-    cout << "  " << Stats::mean(values) << endl;
-    cout << "  " << Stats::sampleStdDev(values) << endl;
+    cout << " " << name << endl;
+    cout << "  " << nGenValues << " | " << Stats::mean(values) << " | " << Stats::sampleStdDev(values);
+    ic = Stats::confidenceInterval(values, 1.96);
+    cout << " | [" << ic.first << ", " << ic.second << "]" << endl;
 
-    std::pair<double, double> ic = Stats::confidenceInterval(values, 1.96);
-    cout << "  [" << ic.first << ", " << ic.second << "]" << endl;
-
-    double meanTime = 0;
-    for (size_t i = 0; i < nIntervals; ++i) {
-        meanTime += Benchmarker::run(generator, nGenValues);
+    std::vector<double> times;
+    times.reserve(nSims);
+    for (size_t i = 0; i < nSims; ++i) {
+        times.push_back(Benchmarker::run(generator, nGenValues));
     }
 
-    cout << "  " << meanTime/nIntervals << "s" << endl;
+    cout << "  " << nSims << " | " << Stats::mean(times) << "s | " << Stats::sampleStdDev(values);
+    ic = Stats::confidenceInterval(times, 1.96);
+    cout << " | [" << ic.first << ", " << ic.second << "]" << endl;
+
 }
 
 int main() {
 
     seed_seq seed = {42, 42, 42};
-    size_t nGenValues = 1000000, nIntervals = 1;
+    size_t nGenValues = 100000, nSims = 1000;
 
     cout << "Format : " << endl;
     cout << "-- <Ensemble de donnees> --" << endl;
-    cout << "Esperance theorique: <esperance theorique>" << endl;
-    cout << "<Methode> (<nombre de generations>):" << endl;
-    cout << " <esperance empirique>" << endl;
-    cout << " <ecart-type empirique>" << endl;
-    cout << " <moyenne des temps>s" << endl;
+    cout << "Esperance : <esperance>" << endl;
+    cout << "<Methode>:" << endl;
+    cout << " <nombre de generations> | <moyenne des V.A>    | <estimateur d'ecart-type> | <IC>" << endl;
+    cout << " <nombre de simulations> | <moyenne des temps>s | <estimateur d'ecart-type> | <IC>" << endl;
     cout << endl;
 
     vector<Dataset> datasets = {
@@ -55,6 +56,8 @@ int main() {
             {"Profil plutot plat", {{2, 4, 7, 9, 12, 13, 17, 20}, {8, 10, 10, 9, 5, 9, 10, 6}}},
             {"Profil accidente", {{2, 3, 5, 10, 12, 13, 15, 17, 19, 20}, {1, 10, 0, 1, 8, 4, 1, 0, 2, 9}}}
     };
+
+    cout << "Tests avec " << nGenValues << " generations de V.A. et " << nSims << " simulations" << "\n\n";
 
     for (const Dataset& dataset : datasets) {
         const vector<double>& xs = dataset.values.first;
@@ -68,9 +71,9 @@ int main() {
         InverseFunctions inv(xs, ys, seed);
 
 
-        test("Acceptation - rejet   ", hom, nGenValues, nIntervals);
-        test("Melanges - geometrique", geo, nGenValues, nIntervals);
-        test("Melanges - inverses   ", inv, nGenValues, nIntervals);
+        test("Acceptation - rejet   ", hom, nGenValues, nSims);
+        test("Melanges - geometrique", geo, nGenValues, nSims);
+        test("Melanges - inverses   ", inv, nGenValues, nSims);
         cout << endl;
     }
 

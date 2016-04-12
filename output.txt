@@ -1,0 +1,59 @@
+Format :
+-- <Ensemble de donnees> --
+Esperance : <esperance>
+<Methode>:
+ <nombre de generations> | <moyenne> | <estimateur d'ecart-type> | <IC>
+ <nombre de simulations> | <moyenne des temps>s | <estimateur d'ecart-type> | <IC>
+
+Tests avec 100000 realisations de V.A. generees et 1000 simulations
+
+-- Variable uniforme U(5,15) --
+ Esperance theorique    : 10
+ Acceptation - rejet
+  100000 | 9.9829 | 2.88569 | [9.96502, 10.0008]
+  1000 | 0.056098s | 2.88569 | [0.0556898, 0.0565062]
+ Melanges - geometrique
+  100000 | 9.9829 | 2.88569 | [9.96502, 10.0008]
+  1000 | 0.069255s | 2.88569 | [0.0690457, 0.0694643]
+ Melanges - inverses
+  100000 | 9.97891 | 2.88187 | [9.96105, 9.99677]
+  1000 | 0.043405s | 2.88187 | [0.0432799, 0.0435301]
+
+-- Melange de deux variables triangulaires --
+ Esperance theorique    : 8.5
+ Acceptation - rejet
+  100000 | 8.50226 | 4.62244 | [8.47361, 8.53091]
+  1000 | 0.127447s | 4.62244 | [0.12705, 0.127844]
+ Melanges - geometrique
+  100000 | 8.48772 | 4.62542 | [8.45905, 8.51639]
+  1000 | 0.068476s | 4.62542 | [0.0683313, 0.0686207]
+ Melanges - inverses
+  100000 | 8.46892 | 4.62278 | [8.44027, 8.49757]
+  1000 | 0.04828s | 4.62278 | [0.0481785, 0.0483815]
+
+-- Profil plutot plat --
+ Esperance theorique    : 10.758
+ Acceptation - rejet
+  100000 | 10.7249 | 5.21519 | [10.6926, 10.7573]
+  1000 | 0.058159s | 5.21519 | [0.0580481, 0.0582699]
+ Melanges - geometrique
+  100000 | 10.7217 | 5.20076 | [10.6894, 10.7539]
+  1000 | 0.068249s | 5.20076 | [0.0681159, 0.0683821]
+ Melanges - inverses
+  100000 | 10.716 | 5.21252 | [10.6837, 10.7483]
+  1000 | 0.048777s | 5.21252 | [0.048684, 0.04887]
+
+-- Profil accidente --
+ Esperance theorique    : 10.2616
+ Acceptation - rejet
+  100000 | 10.2716 | 5.68882 | [10.2364, 10.3069]
+  1000 | 0.188663s | 5.68882 | [0.188371, 0.188955]
+ Melanges - geometrique
+  100000 | 10.2472 | 5.68945 | [10.212, 10.2825]
+  1000 | 0.06945s | 5.68945 | [0.0693193, 0.0695807]
+ Melanges - inverses
+  100000 | 10.2242 | 5.70371 | [10.1888, 10.2595]
+  1000 | 0.049824s | 5.70371 | [0.0497317, 0.0499163]
+
+
+Process finished with exit code 0
