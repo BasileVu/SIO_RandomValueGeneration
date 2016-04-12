@@ -7,6 +7,7 @@
 #include "MixedGeometric.h"
 #include "MixedInverse.h"
 #include "Benchmarker.h"
+#include "Stats.h"
 
 using namespace std;
 
@@ -17,7 +18,7 @@ struct Dataset {
 
 void test(const string& name, RandomValueGenerator& generator, size_t nGenValues, size_t nIntervals) {
     cout << " " << name << "(" << nGenValues << ") :" << endl;
-    cout << "  " << EmpiricalEGenerator::generate(generator, nGenValues) << endl;
+    cout << "  " << Stats::empiricalEVal(generator, nGenValues) << endl;
 
     double meanTime = 0;
     for (size_t i = 0; i < nIntervals; ++i) {
@@ -52,7 +53,7 @@ int main() {
         const vector<double>& ys = dataset.values.second;
 
         cout << "-- " + dataset.name << " --" << endl;
-        cout << " Esperance theorique    : " << TheoricalECalculator::calculate(xs, ys) << endl;
+        cout << " Esperance theorique    : " << Stats::theoricalEVal(xs, ys) << endl;
 
         HitOrMiss hom(xs, ys, seed);
         MixedGeometric mgeo(xs, ys, seed);

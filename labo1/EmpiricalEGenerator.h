@@ -4,8 +4,6 @@
 #include "RandomValueGenerator.h"
 
 class EmpiricalEGenerator {
-    const RandomValueGenerator& generator;
-
 public:
     static double generate(RandomValueGenerator& generator, size_t nGenValues) noexcept(false) {
         if (nGenValues == 0) {

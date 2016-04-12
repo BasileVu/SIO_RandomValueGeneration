@@ -6,7 +6,6 @@
 
 #include "PiecewiseFunction.h"
 #include "EmpiricalEGenerator.h"
-#include "TheoricalECalculator.h"
 #include "RandomValueGenerator.h"
 
 class Benchmarker {
