@@ -8,8 +8,7 @@
  */
 class Geometric : public RandomValueGenerator {
 public:
-    Geometric(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
-            : RandomValueGenerator(xs, ys) {}
+    Geometric(const std::vector<double>& xs, const std::vector<double>& ys) : RandomValueGenerator(xs, ys) {}
 
     double generate() {
 

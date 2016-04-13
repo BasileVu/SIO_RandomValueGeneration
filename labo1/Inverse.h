@@ -9,8 +9,7 @@
 
 class InverseFunctions : public RandomValueGenerator {
 public:
-    InverseFunctions(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
-            : RandomValueGenerator(xs, ys) {}
+    InverseFunctions(const std::vector<double>& xs, const std::vector<double>& ys) : RandomValueGenerator(xs, ys) {}
 
     double generate() {
 

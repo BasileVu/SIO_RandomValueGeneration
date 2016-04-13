@@ -17,7 +17,7 @@ struct Dataset {
 };
 
 void printHeader(const string& name) {
-    cout << " " << name << "\n\n";
+    cout << " " << name << endl;
     cout << "                 moyenne  |  ecart-type  |           IC           |  delta" << endl;
 }
 
@@ -49,7 +49,7 @@ void test(const string& name, RandomValueGenerator& generator, size_t nGenValues
 int main() {
 
     seed_seq seed = {42, 42, 42};
-    size_t nGenValues = 1000000, nSims = 2;
+    size_t nGenValues = 100000, nSims = 1000;
 
     vector<Dataset> datasets = {
             {"Variable uniforme U(5,15)", {{5, 15}, {1, 1}}},
@@ -58,7 +58,7 @@ int main() {
             {"Profil accidente", {{2, 3, 5, 10, 12, 13, 15, 17, 19, 20}, {1, 10, 0, 1, 8, 4, 1, 0, 2, 9}}}
     };
 
-    cout << "Tests avec " << nGenValues << " generations de V.A. et " << nSims << " simulations" << "\n\n";
+    cout << "Tests de " << nSims << " simulations avec " << nGenValues << " generations" << "\n\n";
 
     for (const Dataset& dataset : datasets) {
         const vector<double>& xs = dataset.values.first;
@@ -67,9 +67,9 @@ int main() {
         cout << "-- " + dataset.name << " --" << endl;
         cout << " Esperance : " << Stats::expectedValue(xs, ys) << endl;
 
-        HitOrMiss hom(xs, ys, seed);
-        Geometric geo(xs, ys, seed);
-        InverseFunctions inv(xs, ys, seed);
+        HitOrMiss hom(xs, ys);
+        Geometric geo(xs, ys);
+        InverseFunctions inv(xs, ys);
 
         hom.setSeed(seed);
         geo.setSeed(seed);

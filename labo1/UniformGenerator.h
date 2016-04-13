@@ -4,10 +4,10 @@
 #include <random>
 
 /**
- * Generates numbers using the uniform distribution.
+ * Permet de generer des nombres entre deux bornes de maniere plus legere qu'en utilisant directement la
+ * distribution uniforme "uniform_real_distribution" de la librairie standard.
  */
 class UniformGenerator {
-
 private:
     std::mt19937_64 generator;
     std::uniform_real_distribution<double> distribution;

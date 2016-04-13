@@ -17,8 +17,7 @@ private:
 
 public:
 
-    HitOrMiss(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
-            : RandomValueGenerator(xs, ys) {
+    HitOrMiss(const std::vector<double>& xs, const std::vector<double>& ys) : RandomValueGenerator(xs, ys) {
 
         a = xs.front(), b = xs.back();
         yMax = *std::max_element(ys.begin(), ys.end());
@@ -27,7 +26,7 @@ public:
     double generate() {
 
         double X, Y;
-        size_t sliceIndex;  // indice de la "tranche" dans laquelle X se trouvera"
+        size_t sliceIndex;  // indice de la "tranche" dans laquelle X se trouvera
 
         do {
             // génération du point (X,Y)
