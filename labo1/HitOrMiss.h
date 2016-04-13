@@ -18,7 +18,6 @@ private:
 public:
 
     HitOrMiss(const std::vector<double>& xs, const std::vector<double>& ys) : RandomValueGenerator(xs, ys) {
-
         a = xs.front(), b = xs.back();
         yMax = *std::max_element(ys.begin(), ys.end());
     }

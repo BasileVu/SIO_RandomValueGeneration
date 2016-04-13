@@ -18,14 +18,14 @@ struct Dataset {
 
 void printHeader(const string& name) {
     cout << " " << name << endl;
-    cout << "                 moyenne  |  ecart-type  |           IC           |  delta" << endl;
+    cout << "                     moyenne  |  ecart-type  |             IC             |   delta" << endl;
 }
 
 void print(const string& name, double mean, double stdDev, const ConfidenceInterval& ic) {
     cout << name
-    << setw(8) << mean << " | "
+    << setw(12) << mean << " | "
     << setw(12) << stdDev << " | "
-    << setw(22) << ic.toString() << " | " << setw(8) << ic.delta << endl;
+    << setw(26) << ic.toString() << " | " << setw(12) << ic.delta << endl;
 }
 
 void test(const string& name, RandomValueGenerator& generator, size_t nGenValues, size_t nSims) {
@@ -48,8 +48,8 @@ void test(const string& name, RandomValueGenerator& generator, size_t nGenValues
 
 int main() {
 
-    seed_seq seed = {42, 42, 42};
-    size_t nGenValues = 100000, nSims = 1000;
+    seed_seq seed = {24, 512, 42};
+    size_t nGenValues = 1000000, nSims = 5000;
 
     vector<Dataset> datasets = {
             {"Variable uniforme U(5,15)", {{5, 15}, {1, 1}}},
