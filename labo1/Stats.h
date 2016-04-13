@@ -2,9 +2,23 @@
 #define STATS_H
 
 #include <vector>
+#include <string>
+#include <sstream>
 
 #include "PiecewiseLinearFunction.h"
 #include "RandomValueGenerator.h"
+
+struct ConfidenceInterval {
+    double lower;
+    double upper;
+    double delta;
+
+    std::string toString() const {
+        std::stringstream ss;
+        ss << "[" << lower << "," << upper << "]";
+        return ss.str();
+    }
+};
 
 class Stats {
 public:
@@ -21,8 +35,6 @@ public:
     }
 
     static double sampleVar(const std::vector<double>& values) {
-        // V(X) = ((somme de i = 1 à n (x_i ^ 2)) / n) - moyenne^2
-
         double sum = 0;
         double m = mean(values);
 
@@ -56,10 +68,10 @@ public:
         return std::accumulate(values.begin(), values.end(), 0.0) / values.size();
     }
 
-    static std::pair<double, double> confidenceInterval(const std::vector<double>& values, double quantile) {
+    static ConfidenceInterval confidenceInterval(const std::vector<double>& values, double quantile) {
         double m = mean(values);
         double halfDelta = quantile * (sampleStdDev(values) / std::sqrt(values.size()));
-        return std::make_pair(m - halfDelta, m + halfDelta);
+        return ConfidenceInterval {m - halfDelta, m + halfDelta, halfDelta*2};
     };
 };
 

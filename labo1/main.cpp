@@ -2,6 +2,7 @@
 #include <random>
 #include <vector>
 #include <string>
+#include <iomanip>
 
 #include "HitOrMiss.h"
 #include "Geometric.h"
@@ -16,14 +17,23 @@ struct Dataset {
     pair<vector<double>, vector<double>> values;
 };
 
+void printHeader(const string& name) {
+    cout << " " << name << "\n\n";
+    cout << "                 moyenne | ecart-type |           IC           | delta" << endl;
+}
+
+void print(const string& name, double mean, double stdDev, const ConfidenceInterval& ic) {
+    cout << name
+    << setw(7) << mean << " | "
+    << setw(10) << stdDev << " | "
+    << setw(22) << ic.toString() << " | " << setw(7) << ic.delta << endl;
+}
+
 void test(const string& name, RandomValueGenerator& generator, size_t nGenValues, size_t nSims) {
-    std::pair<double, double> ic;
     std::vector<double> values = Stats::generateNValues(generator, nGenValues);
 
-    cout << " " << name << endl;
-    cout << "  " << nGenValues << " | " << Stats::mean(values) << " | " << Stats::sampleStdDev(values);
-    ic = Stats::confidenceInterval(values, 1.96);
-    cout << " | [" << ic.first << ", " << ic.second << "]" << endl;
+    printHeader(name);
+    print("  generations :  ", Stats::mean(values), Stats::sampleStdDev(values), Stats::confidenceInterval(values, 1.96));
 
     std::vector<double> times;
     times.reserve(nSims);
@@ -31,24 +41,14 @@ void test(const string& name, RandomValueGenerator& generator, size_t nGenValues
         times.push_back(Benchmarker::run(generator, nGenValues));
     }
 
-    cout << "  " << nSims << " | " << Stats::mean(times) << "s | " << Stats::sampleStdDev(values);
-    ic = Stats::confidenceInterval(times, 1.96);
-    cout << " | [" << ic.first << ", " << ic.second << "]" << endl;
-
+    print("  temps       :  ", Stats::mean(times), Stats::sampleStdDev(values), Stats::confidenceInterval(times, 1.96));
+    cout << endl;
 }
 
 int main() {
 
     seed_seq seed = {42, 42, 42};
-    size_t nGenValues = 100000, nSims = 1000;
-
-    cout << "Format : " << endl;
-    cout << "-- <Ensemble de donnees> --" << endl;
-    cout << "Esperance : <esperance>" << endl;
-    cout << "<Methode>:" << endl;
-    cout << " <nombre de generations> | <moyenne des V.A>    | <estimateur d'ecart-type> | <IC>" << endl;
-    cout << " <nombre de simulations> | <moyenne des temps>s | <estimateur d'ecart-type> | <IC>" << endl;
-    cout << endl;
+    size_t nGenValues = 100000, nSims = 10;
 
     vector<Dataset> datasets = {
             {"Variable uniforme U(5,15)", {{5, 15}, {1, 1}}},
@@ -74,7 +74,7 @@ int main() {
         test("Acceptation - rejet   ", hom, nGenValues, nSims);
         test("Melanges - geometrique", geo, nGenValues, nSims);
         test("Melanges - inverses   ", inv, nGenValues, nSims);
-        cout << endl;
+        cout << "\n\n";
     }
 
     return EXIT_SUCCESS;

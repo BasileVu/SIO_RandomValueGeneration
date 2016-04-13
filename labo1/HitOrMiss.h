@@ -36,7 +36,7 @@ public:
             p = pointGenerator->generate(a, b, 0, yMax);
 
             // on cherche le morceau lié à l'intervalle dans laquelle X se trouve
-            sliceIndex = findPart(p.x);
+            sliceIndex = func.findPart(p.x);
 
             // rejet si Y est > que f(X), avec f_k la fonction affine associée à la tranche k
         } while (p.y > func.pieces[sliceIndex].f_k(p.x));
@@ -47,36 +47,6 @@ public:
     ~HitOrMiss() {
         delete pointGenerator;
     }
-
-private:
-
-    /**
-     * \brief Recherche dichotomique afin de trouver dans quelle intervalle x se trouve.
-     * \param x l'abscisse dont on veut connaître l'intervalle.
-     * \return l'indice du morceau dans lequel x se trouve.
-     */
-    size_t findPart(double x) const {
-
-        size_t first = 0, last = func.pieces.size() - 1; // indices des tranches à prendre en compte
-
-        while (true) {
-
-            // il ne reste qu'une tranche -> x est dedans
-            if (first == last) {
-                return first;
-            }
-
-            // on regarde si x est dans la première ou deuxième moitié de l'intervalle de recherche
-            size_t mid = (last-first)/2 + first;
-            if (x < func.pieces[mid].p1.x) {   // première moitié
-                last = mid;
-            } else {                    // deuxième moitié
-                first = mid+1;
-            }
-        }
-    }
-
-    
 };
 
 #endif // HITORMISS_H

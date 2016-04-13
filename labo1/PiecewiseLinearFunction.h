@@ -30,7 +30,7 @@ struct PiecewiseLinearFunction {
             if (i < xs.size() - 1) {
 
                 Piece s {{xs[i], ys[i]}, {xs[i+1], ys[i+1]}};
-                s.A_k = (double)(ys[i+1] + ys[i]) * (xs[i+1] - xs[i]) / 2;
+                s.A_k = (ys[i+1] + ys[i]) * (xs[i+1] - xs[i]) / 2;
                 s.f_k = [&xs, &ys, i](double x) {
                     double m = (ys[i + 1] - ys[i]) / (xs[i+1] - xs[i]);
                     return m * (x - xs[i]) + ys[i];
@@ -38,6 +38,32 @@ struct PiecewiseLinearFunction {
 
                 pieces.push_back(s);
                 A += s.A_k;
+            }
+        }
+    }
+
+    /**
+     * \brief Recherche dichotomique afin de trouver dans quelle intervalle x se trouve.
+     * \param x l'abscisse dont on veut connaître l'intervalle.
+     * \return l'indice du morceau dans lequel x se trouve.
+     */
+    size_t findPart(double x) const {
+
+        size_t first = 0, last = pieces.size() - 1; // indices des tranches à prendre en compte
+
+        while (true) {
+
+            // il ne reste qu'une tranche -> x est dedans
+            if (first == last) {
+                return first;
+            }
+
+            // on regarde si x est dans la première ou deuxième moitié de l'intervalle de recherche
+            size_t mid = (last-first)/2 + first;
+            if (x < pieces[mid].p1.x) {   // première moitié
+                last = mid;
+            } else {                    // deuxième moitié
+                first = mid+1;
             }
         }
     }
