@@ -53,8 +53,8 @@ public:
         PiecewiseLinearFunction func(xs, ys);
         double res = 0;
         for (const Piece& p : func.pieces) {
-            double x0 = p.p0.x, x1 = p.p1.x;
-            double y0 = p.p0.y, y1 = p.p1.y;
+            double x0 = p.x0, x1 = p.x1;
+            double y0 = p.y0, y1 = p.y1;
 
             if (y0 + y1 > 0) {
                 double eVal = (y0 * (2 * x0 + x1) + y1 * (x0 + 2 * x1)) / (3 * (y0 + y1));

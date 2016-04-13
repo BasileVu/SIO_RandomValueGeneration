@@ -6,7 +6,6 @@
 #include <algorithm>
 
 #include "RandomValueGenerator.h"
-#include "PointGenerator.h"
 
 /**
  * Classe utilisant une methode bete et mechante d'acceptation-rejet afin de générer des
@@ -14,8 +13,8 @@
  */
 class HitOrMiss : public RandomValueGenerator {
 private:
-    PointGenerator* pointGenerator;
     double a, b, yMax = 0;
+
 public:
 
     HitOrMiss(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
@@ -23,29 +22,25 @@ public:
 
         a = xs.front(), b = xs.back();
         yMax = *std::max_element(ys.begin(), ys.end());
-        pointGenerator = new PointGenerator(seed);
     }
 
-    double generate() const {
+    double generate() {
 
-        Point p;  // point (X,Y) qui sera généré aléatoirement
+        double X, Y;
         size_t sliceIndex;  // indice de la "tranche" dans laquelle X se trouvera"
 
         do {
             // génération du point (X,Y)
-            p = pointGenerator->generate(a, b, 0, yMax);
+            X = generator.next() * (b - a) + a;
+            Y = generator.next() * yMax;
 
             // on cherche le morceau lié à l'intervalle dans laquelle X se trouve
-            sliceIndex = func.findPart(p.x);
+            sliceIndex = func.findPart(X);
 
             // rejet si Y est > que f(X), avec f_k la fonction affine associée à la tranche k
-        } while (p.y > func.pieces[sliceIndex].f_k(p.x));
+        } while (Y > func.pieces[sliceIndex].f_k(X));
 
-        return p.x;
-    }
-
-    ~HitOrMiss() {
-        delete pointGenerator;
+        return X;
     }
 };
 

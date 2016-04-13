@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <functional>
-#include "Point.h"
 
 /**
  * Regroupe les informations du "morceau" d'une fonction affine par morceaux.
@@ -13,7 +12,8 @@ struct Piece {
     // fonction linéaire prenant un double et renvoyant un double
     typedef std::function<double(double)> LinearFunc;
 
-    Point p0, p1;         // les deux points définissant f_k.
+    double x0, x1;    // bornes de l'intervalle definissant le morceau
+    double y0, y1;    // ordonnees correspodant aux bornes
     double A_k;       // aire sous la fonction f_k
     LinearFunc f_k;   // fonction associée à ce morceau k.
 };
@@ -29,7 +29,7 @@ struct PiecewiseLinearFunction {
 
             if (i < xs.size() - 1) {
 
-                Piece s {{xs[i], ys[i]}, {xs[i+1], ys[i+1]}};
+                Piece s {xs[i], xs[i+1], ys[i], ys[i+1]};
                 s.A_k = (ys[i+1] + ys[i]) * (xs[i+1] - xs[i]) / 2;
                 s.f_k = [&xs, &ys, i](double x) {
                     double m = (ys[i + 1] - ys[i]) / (xs[i+1] - xs[i]);
@@ -60,7 +60,7 @@ struct PiecewiseLinearFunction {
 
             // on regarde si x est dans la première ou deuxième moitié de l'intervalle de recherche
             size_t mid = (last-first)/2 + first;
-            if (x < pieces[mid].p1.x) {   // première moitié
+            if (x < pieces[mid].x1) {   // première moitié
                 last = mid;
             } else {                    // deuxième moitié
                 first = mid+1;

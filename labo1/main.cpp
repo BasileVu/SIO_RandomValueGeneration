@@ -7,7 +7,6 @@
 #include "HitOrMiss.h"
 #include "Geometric.h"
 #include "Inverse.h"
-#include "Benchmarker.h"
 #include "Stats.h"
 
 using namespace std;
@@ -19,14 +18,14 @@ struct Dataset {
 
 void printHeader(const string& name) {
     cout << " " << name << "\n\n";
-    cout << "                 moyenne | ecart-type |           IC           | delta" << endl;
+    cout << "                 moyenne  |  ecart-type  |           IC           |  delta" << endl;
 }
 
 void print(const string& name, double mean, double stdDev, const ConfidenceInterval& ic) {
     cout << name
-    << setw(7) << mean << " | "
-    << setw(10) << stdDev << " | "
-    << setw(22) << ic.toString() << " | " << setw(7) << ic.delta << endl;
+    << setw(8) << mean << " | "
+    << setw(12) << stdDev << " | "
+    << setw(22) << ic.toString() << " | " << setw(8) << ic.delta << endl;
 }
 
 void test(const string& name, RandomValueGenerator& generator, size_t nGenValues, size_t nSims) {
@@ -38,17 +37,19 @@ void test(const string& name, RandomValueGenerator& generator, size_t nGenValues
     std::vector<double> times;
     times.reserve(nSims);
     for (size_t i = 0; i < nSims; ++i) {
-        times.push_back(Benchmarker::run(generator, nGenValues));
+        clock_t start = clock();
+        Stats::generateNValues(generator, nGenValues);
+        times.push_back((double)(clock() - start) / CLOCKS_PER_SEC);
     }
 
-    print("  temps       :  ", Stats::mean(times), Stats::sampleStdDev(values), Stats::confidenceInterval(times, 1.96));
+    print("  temps[s]    :  ", Stats::mean(times), Stats::sampleStdDev(times), Stats::confidenceInterval(times, 1.96));
     cout << endl;
 }
 
 int main() {
 
     seed_seq seed = {42, 42, 42};
-    size_t nGenValues = 100000, nSims = 10;
+    size_t nGenValues = 1000000, nSims = 2;
 
     vector<Dataset> datasets = {
             {"Variable uniforme U(5,15)", {{5, 15}, {1, 1}}},
@@ -64,12 +65,15 @@ int main() {
         const vector<double>& ys = dataset.values.second;
 
         cout << "-- " + dataset.name << " --" << endl;
-        cout << " Esperance theorique    : " << Stats::expectedValue(xs, ys) << endl;
+        cout << " Esperance : " << Stats::expectedValue(xs, ys) << endl;
 
         HitOrMiss hom(xs, ys, seed);
         Geometric geo(xs, ys, seed);
         InverseFunctions inv(xs, ys, seed);
 
+        hom.setSeed(seed);
+        geo.setSeed(seed);
+        inv.setSeed(seed);
 
         test("Acceptation - rejet   ", hom, nGenValues, nSims);
         test("Melanges - geometrique", geo, nGenValues, nSims);

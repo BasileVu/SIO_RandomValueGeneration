@@ -8,18 +8,11 @@
 #include "RandomValueGenerator.h"
 
 class InverseFunctions : public RandomValueGenerator {
-private:
-    UniformGenerator* generator;
-
 public:
     InverseFunctions(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
-            : RandomValueGenerator(xs, ys) {
+            : RandomValueGenerator(xs, ys) {}
 
-        generator = new UniformGenerator(0, 1);
-        generator->setSeed(seed);
-    }
-
-    double generate() const {
+    double generate() {
 
         // On commence par sélectionner une intervalle en fonction du p_k associé à la tranche liée à cette intervalle.
         // K représente l'indice de l'intervalle sélectionné.
@@ -28,10 +21,10 @@ public:
         // Ensuite, on applique la méthode des fonctions inverses.
         const Piece& piece = func.pieces[K];
 
-        double x0 = piece.p0.x, x1 = piece.p1.x;
-        double y0 = piece.p0.y, y1 = piece.p1.y;
+        double x0 = piece.x0, x1 = piece.x1;
+        double y0 = piece.y0, y1 = piece.y1;
 
-        double U = generator->next();
+        double U = generator.next();
 
         // Si y1 = y1, alors on est dans le cas d'une uniforme. Sinon, on inverse la fonction de repartition associée
         // à la fonction f_k.
@@ -43,16 +36,12 @@ public:
         }
     }
 
-    ~InverseFunctions() {
-        delete generator;
-    }
-
 private:
     // permet de trouve dans quel intervalle k on tombe en fonction de la probablilité p_k de la tranche liée à
     // cette intervalle
-    size_t generateK() const {
+    size_t generateK() {
         size_t j = 1;
-        double U = generator->next();
+        double U = generator.next();
 
         // on cherche l'indice de l'intervalle dans lequel on est tombé
         while (true) {

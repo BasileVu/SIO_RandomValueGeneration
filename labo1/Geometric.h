@@ -1,29 +1,17 @@
 #ifndef GEOMETRIC_H
 #define GEOMETRIC_H
 
-#include "PointGenerator.h"
 #include "UniformGenerator.h"
 
 /**
  *
  */
 class Geometric : public RandomValueGenerator {
-private:
-    UniformGenerator* generator;
-    PointGenerator* pointGenerator;
-
 public:
-
     Geometric(const std::vector<double>& xs, const std::vector<double>& ys, const std::seed_seq& seed)
-            : RandomValueGenerator(xs, ys) {
+            : RandomValueGenerator(xs, ys) {}
 
-        generator = new UniformGenerator(0, 1);
-        generator->setSeed(seed);
-
-        pointGenerator = new PointGenerator(seed);
-    }
-
-    double generate() const {
+    double generate() {
 
         // On commence par sélectionner une intervalle en fonction du p_k associé à la tranche liée à cette intervalle.
         // K représente l'indice de l'intervalle sélectionné.
@@ -33,27 +21,26 @@ public:
         // Ensuite, on génère une réalisation d'une variable de densité f_K en acceptant à tous les coups X.
         const Piece& piece = func.pieces[K];
 
-        Point p = pointGenerator->generate(piece.p0.x, piece.p1.x, 0, std::max(piece.p0.y, piece.p1.y));
+        double x0 = piece.x0, x1 = piece.x1;
+        double yMax = std::max(piece.y0, piece.y1);
+
+        double X = generator.next() * (x1 - x0) + x0;
+        double Y = generator.next() * yMax;
 
         // Si Y est sous f_k, ok, on retourne X. Sinon, on applique une symétrie à X et on le retourne.
-        if (p.y <= piece.f_k(p.x)) {
-            return p.x;
+        if (Y <= piece.f_k(X)) {
+            return X;
         } else {
-            return (piece.p0.x + (piece.p1.x - p.x));
+            return x0 + (x1 - X);
         }
-    }
-
-    ~Geometric() {
-        delete generator;
-        delete pointGenerator;
     }
 
 private:
     // permet de trouve dans quel intervalle k on tombe en fonction de la probablilité p_k de la tranche liée à
     // cette intervalle
-    size_t generateK() const {
+    size_t generateK() {
         size_t j = 1;
-        double U = generator->next();
+        double U = generator.next();
 
         // on cherche l'indice de l'intervalle dans lequel on est tombé
         while (true) {
