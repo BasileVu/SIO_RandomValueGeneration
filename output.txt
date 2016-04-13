@@ -1,76 +1,80 @@
-Tests de 1000 simulations avec 100000 generations
+Tests de 5000 simulations avec 1000000 generations
 
 -- Variable uniforme U(5,15) --
  Esperance : 10
  Acceptation - rejet
-                 moyenne  |  ecart-type  |           IC           |  delta
-  generations :    9.9829 |      2.88569 |      [9.96502,10.0008] | 0.0357714
-  temps[s]    :   0.04597 |   0.00212829 |  [0.0458381,0.0461019] | 0.000263826
+                     moyenne  |  ecart-type  |             IC             |   delta
+  generations :       9.99876 |      2.88805 |           [9.9931,10.0044] |    0.0113212
+  temps[s]    :     0.0564822 |     0.002313 |      [0.0564181,0.0565463] |  0.000128226
 
  Melanges - geometrique
-                 moyenne  |  ecart-type  |           IC           |  delta
-  generations :   9.99013 |      2.88084 |       [9.97227,10.008] | 0.0357112
-  temps[s]    :   0.06413 |   0.00251782 |  [0.0639739,0.0642861] | 0.000312113
+                     moyenne  |  ecart-type  |             IC             |   delta
+  generations :       10.0035 |      2.88826 |           [9.9978,10.0091] |     0.011322
+  temps[s]    :     0.0806404 |   0.00373474 |      [0.0805369,0.0807439] |  0.000207043
 
  Melanges - inverses
-                 moyenne  |  ecart-type  |           IC           |  delta
-  generations :   9.97891 |      2.88187 |      [9.96105,9.99677] | 0.035724
-  temps[s]    :  0.041608 |   0.00154296 |  [0.0415124,0.0417036] | 0.000191267
+                     moyenne  |  ecart-type  |             IC             |   delta
+  generations :       9.99826 |      2.88586 |           [9.9926,10.0039] |    0.0113126
+  temps[s]    :     0.0538264 |    0.0022246 |      [0.0537647,0.0538881] |  0.000123326
 
 
 
 -- Melange de deux variables triangulaires --
  Esperance : 8.5
  Acceptation - rejet
-                 moyenne  |  ecart-type  |           IC           |  delta
-  generations :   8.50226 |      4.62244 |      [8.47361,8.53091] | 0.0573003
-  temps[s]    :  0.122291 |     0.010812 |    [0.121621,0.122961] | 0.00134027
+                     moyenne  |  ecart-type  |             IC             |   delta
+  generations :       8.49921 |      4.62769 |          [8.49014,8.50828] |    0.0181405
+  temps[s]    :      0.167804 |   0.00859517 |        [0.167566,0.168042] |  0.000476492
 
  Melanges - geometrique
-                 moyenne  |  ecart-type  |           IC           |  delta
-  generations :   8.49053 |      4.62666 |       [8.46185,8.5192] | 0.0573527
-  temps[s]    :  0.066752 |   0.00354952 |    [0.066532,0.066972] | 0.000440003
+                     moyenne  |  ecart-type  |             IC             |   delta
+  generations :        8.4945 |      4.62789 |          [8.48543,8.50357] |    0.0181413
+  temps[s]    :     0.0875782 |   0.00301226 |      [0.0874947,0.0876617] |  0.000166991
 
  Melanges - inverses
-                 moyenne  |  ecart-type  |           IC           |  delta
-  generations :   8.46892 |      4.62278 |      [8.44027,8.49757] | 0.0573046
-  temps[s]    :  0.047338 |   0.00187917 |  [0.0472215,0.0474545] | 0.000232945
+                     moyenne  |  ecart-type  |             IC             |   delta
+  generations :       8.49832 |      4.62784 |          [8.48925,8.50739] |    0.0181411
+  temps[s]    :     0.0682266 |   0.00263762 |      [0.0681535,0.0682997] |  0.000146222
 
 
 
 -- Profil plutot plat --
  Esperance : 10.758
  Acceptation - rejet
-                 moyenne  |  ecart-type  |           IC           |  delta
-  generations :   10.7249 |      5.21519 |      [10.6926,10.7573] | 0.0646482
-  temps[s]    :  0.056084 |   0.00256037 |  [0.0559253,0.0562427] | 0.000317387
+                     moyenne  |  ecart-type  |             IC             |   delta
+  generations :       10.7559 |      5.22366 |          [10.7456,10.7661] |    0.0204767
+  temps[s]    :     0.0793284 |   0.00326109 |       [0.079238,0.0794188] |  0.000180785
 
  Melanges - geometrique
-                 moyenne  |  ecart-type  |           IC           |  delta
-  generations :   10.7187 |      5.20909 |       [10.6864,10.751] | 0.0645726
-  temps[s]    :  0.067211 |   0.00247479 |  [0.0670576,0.0673644] | 0.000306779
+                     moyenne  |  ecart-type  |             IC             |   delta
+  generations :       10.7412 |      5.20638 |           [10.731,10.7514] |     0.020409
+  temps[s]    :     0.0922574 |    0.0027182 |      [0.0921821,0.0923327] |  0.000150689
 
  Melanges - inverses
-                 moyenne  |  ecart-type  |           IC           |  delta
-  generations :    10.716 |      5.21252 |      [10.6837,10.7483] | 0.064615
-  temps[s]    :  0.047648 |   0.00211721 |  [0.0475168,0.0477792] | 0.000262452
+                     moyenne  |  ecart-type  |             IC             |   delta
+  generations :       10.7552 |      5.22255 |           [10.745,10.7655] |    0.0204724
+  temps[s]    :     0.0745272 |   0.00268177 |      [0.0744529,0.0746015] |   0.00014867
 
 
 
---- Profil accidente --
+-- Profil accidente --
  Esperance : 10.2616
  Acceptation - rejet
-                 moyenne  |  ecart-type  |           IC           |  delta
-  generations :   10.2716 |      5.68882 |      [10.2364,10.3069] | 0.0705193
-  temps[s]    :  0.182858 |   0.00714429 |    [0.182415,0.183301] | 0.000885615
+                     moyenne  |  ecart-type  |             IC             |   delta
+  generations :       10.2598 |      5.70906 |          [10.2486,10.2709] |    0.0223795
+  temps[s]    :      0.257825 |   0.00595176 |          [0.25766,0.25799] |  0.000329949
 
  Melanges - geometrique
-                 moyenne  |  ecart-type  |           IC           |  delta
-  generations :    10.237 |      5.70654 |      [10.2016,10.2723] | 0.070739
-  temps[s]    :  0.068308 |   0.00413549 |  [0.0680517,0.0685643] | 0.00051264
+                     moyenne  |  ecart-type  |             IC             |   delta
+  generations :       10.2584 |      5.70699 |          [10.2472,10.2696] |    0.0223714
+  temps[s]    :     0.0954716 |   0.00334572 |      [0.0953789,0.0955643] |  0.000185477
 
  Melanges - inverses
-                 moyenne  |  ecart-type  |           IC           |  delta
-  generations :   10.2242 |      5.70371 |      [10.1888,10.2595] | 0.070704
-  temps[s]    :  0.048736 |   0.00183567 |  [0.0486222,0.0488498] | 0.000227552
+                     moyenne  |  ecart-type  |             IC             |   delta
+  generations :        10.259 |      5.70972 |          [10.2478,10.2702] |    0.0223821
+  temps[s]    :       0.08005 |   0.00264168 |      [0.0799768,0.0801232] |  0.000146448
 
+
+
+
+Process finished with exit code 0
