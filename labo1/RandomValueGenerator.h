@@ -1,9 +1,8 @@
 #ifndef RANDOM_VALUE_GENERATOR_H
 #define RANDOM_VALUE_GENERATOR_H
 
+#include <random>
 #include <vector>
-#include <algorithm>
-#include "UniformGenerator.h"
 #include "PiecewiseLinearFunction.h"
 
 /**
@@ -11,8 +10,10 @@
  */
 class RandomValueGenerator {
 protected:
-    PiecewiseLinearFunction func; // la fonction affine par morceaux utilisee
-    UniformGenerator generator;
+    std::mt19937_64 generator; // generateur mersenne-twister
+    std::uniform_real_distribution<double> distribution; // distribution a utiliser pour le mersenne-twister
+
+    PiecewiseLinearFunction func; // la fonction affine par morceaux que l'on utilise
     std::vector<double> F_parts; // parties de la fonction de repartition F
 
 public:
@@ -27,7 +28,7 @@ public:
      * \brief Initialise la graine du generateur.
      * \param seed La graine a utiliser.
      */
-    void setSeed(const std::seed_seq& seed);
+    void setSeed(std::seed_seq seed);
 
     /**
      * \brief Genere une realisation d'une variable aleatoire associee a la fonction par morceaux.
@@ -96,7 +97,7 @@ class InverseFunctions : public RandomValueGenerator {
 public:
     /**
      * \brief Initialise les valeurs propres a cet algorithme.
-     * \param xs Les d'absisses des points constituant la fonction affine par morceaux.
+     * \param xs Les d'abscisses des points constituant la fonction affine par morceaux.
      * \param ys Les ordonnees des points constituant la fonction affine par morceaux.
      */
     InverseFunctions(const std::vector<double>& xs, const std::vector<double>& ys);

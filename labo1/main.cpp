@@ -56,7 +56,7 @@ int main() {
     seed_seq seed = {24, 512, 42};
 
     // nombre de realisations a generer et nombre de simulations a effectuer
-    size_t nGenValues = 1000000, nSims = 5;
+    size_t nGenValues = 1000000, nSims = 5000;
 
     // jeux de donnees
     vector<Dataset> datasets = {

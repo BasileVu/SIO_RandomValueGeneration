@@ -20,7 +20,7 @@ struct Piece {
 
 struct PiecewiseLinearFunction {
     std::vector<Piece> pieces;   // "morceaux" de la fonction
-    double A = 0;                   // aire totale sous la fonction
+    double A = 0;                // aire totale sous la fonction
 
     PiecewiseLinearFunction(const std::vector<double>& xs, const std::vector<double>& ys);
 

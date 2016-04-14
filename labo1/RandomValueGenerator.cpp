@@ -1,15 +1,17 @@
+#include <algorithm>
+
 #include "Checker.h"
 #include "RandomValueGenerator.h"
 
 RandomValueGenerator::RandomValueGenerator(const std::vector<double>& xs, const std::vector<double>& ys)
-            : func(xs, ys), generator(UniformGenerator(0, 1)) {
+            : func(xs, ys), distribution(std::uniform_real_distribution<double>(0, 1)) {
 
-    // verification de la validité des données
+    // verification de la coherence des donnees
     if (!Checker::check(xs, ys)) {
-        throw std::invalid_argument("Les donnees ne sont pas valides.");
+        throw std::invalid_argument("Erreur: Les donnees ne sont pas coherentes.");
     }
 
-    // création des pk
+    // creation des pk
     std::vector<double> pks;
     pks.reserve(xs.size()-1);
     for (size_t i = 0; i < xs.size()-1; ++i) {
@@ -18,22 +20,22 @@ RandomValueGenerator::RandomValueGenerator(const std::vector<double>& xs, const 
 
     // préparation des parties de F
     F_parts.resize(xs.size());
-    F_parts[0] = 0; // F_0 : premiere partie de la fonction de répartition -> 0 avant xs[0]
+    F_parts[0] = 0; // F_0 : premiere partie de la fonction de repartition -> 0 avant xs[0]
 
     for (size_t i = 1; i < F_parts.size(); ++i) {
         F_parts[i] = F_parts[i-1] + pks[i-1];
     }
 }
 
-void RandomValueGenerator::setSeed(const std::seed_seq& seed) {
-    generator.setSeed(seed);
+void RandomValueGenerator::setSeed(std::seed_seq seed) {
+    generator.seed(seed);
 }
 
 size_t RandomValueGenerator::generateK() {
     size_t j = 1;
-    double U = generator.next();
+    double U = distribution(generator);
 
-    // on cherche l'indice de l'intervalle dans lequel on est tombé
+    // on cherche l'indice de l'intervalle dans lequel on est tombe
     while (true) {
         if (U <= F_parts[j]) {
             return j-1;
@@ -57,18 +59,18 @@ InverseFunctions::InverseFunctions(const std::vector<double>& xs, const std::vec
 
 double HitOrMiss::generate() {
 
-    double X, Y;
+    double X, Y; // coordonnees du point (X,Y) qui sera genere
     size_t sliceIndex;  // indice de la "tranche" dans laquelle X se trouvera
 
     do {
-        // génération du point (X,Y)
-        X = generator.next() * (b - a) + a;
-        Y = generator.next() * yMax;
+        // generation du point (X,Y)
+        X = distribution(generator) * (b - a) + a;
+        Y = distribution(generator) * yMax;
 
-        // on cherche le morceau lié à l'intervalle dans laquelle X se trouve
+        // on cherche le morceau lie à l'intervalle dans laquelle X se trouve
         sliceIndex = func.findPart(X);
 
-        // rejet si Y est > que f(X), avec f_k la fonction affine associée à la tranche k
+        // rejet si Y est > que f(X), avec f_k la fonction affine associee a l'intervalle k
     } while (Y > func.pieces[sliceIndex].f_k(X));
 
     return X;
@@ -77,21 +79,25 @@ double HitOrMiss::generate() {
 
 double Geometric::generate() {
 
-    // On commence par sélectionner une intervalle en fonction du p_k associé à la tranche liée à cette intervalle.
-    // K représente l'indice de l'intervalle sélectionné.
+    // On commence par selectionner une intervalle en fonction des p_k des "tranches" de la fonction.
+    // K represente l'indice de l'intervalle selectionne.
     size_t K = generateK();
 
 
-    // Ensuite, on génère une réalisation d'une variable de densité f_K en acceptant à tous les coups X.
+    // Ensuite, on genere une realisation d'une variable de densite f_K en acceptant a tous les coups X.
+
+    // morceau associe a l'indice K
     const Piece& piece = func.pieces[K];
 
+    // valeurs relatives au morceau de fonction K
     double x0 = piece.x0, x1 = piece.x1;
     double yMax = std::max(piece.y0, piece.y1);
 
-    double X = generator.next() * (x1 - x0) + x0;
-    double Y = generator.next() * yMax;
+    // generation du point (X,Y)
+    double X = distribution(generator) * (x1 - x0) + x0;
+    double Y = distribution(generator) * yMax;
 
-    // Si Y est sous f_k, ok, on retourne X. Sinon, on applique une symétrie à X et on le retourne.
+    // Si Y est sous f_K, ok, on retourne X. Sinon, on applique une symetrie à X et on le retourne.
     if (Y <= piece.f_k(X)) {
         return X;
     } else {
@@ -101,20 +107,23 @@ double Geometric::generate() {
 
 double InverseFunctions::generate() {
 
-    // On commence par sélectionner une intervalle en fonction du p_k associé à la tranche liée à cette intervalle.
-    // K représente l'indice de l'intervalle sélectionné.
+    // On commence par selectionner une intervalle en fonction des p_k des "tranches" de la fonction.
+    // K represente l'indice de l'intervalle selectionne.
     size_t K = generateK();
 
-    // Ensuite, on applique la méthode des fonctions inverses.
+    // Ensuite, on applique la methode des fonctions inverses.
+
+    // morceau associe a l'indice K
     const Piece& piece = func.pieces[K];
 
+    // valeurs relatives au morceau de fonction K
     double x0 = piece.x0, x1 = piece.x1;
     double y0 = piece.y0, y1 = piece.y1;
 
-    double U = generator.next();
+    double U = distribution(generator);
 
-    // Si y1 = y1, alors on est dans le cas d'une uniforme. Sinon, on inverse la fonction de repartition associée
-    // à la fonction f_k.
+    // Si y0 = y1, alors on est dans le cas d'une uniforme. Sinon, on inverse la fonction de repartition associee
+    // a la fonction f_K.
     if (y0 == y1) {
         return x0 + U*(x1 - x0);
     } else {

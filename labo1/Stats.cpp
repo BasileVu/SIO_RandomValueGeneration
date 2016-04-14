@@ -19,9 +19,6 @@ std::vector<double> Stats::generateNValues(RandomValueGenerator& generator, size
     return values;
 }
 
-/**
- * \brief
- */
 double Stats::sampleVar(const std::vector<double>& values) {
     double sum = 0;
     double m = mean(values);
