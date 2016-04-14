@@ -1,12 +1,8 @@
 #include <iostream>
-#include <random>
 #include <vector>
 #include <string>
 #include <iomanip>
 
-#include "HitOrMiss.h"
-#include "Geometric.h"
-#include "Inverse.h"
 #include "Stats.h"
 
 using namespace std;
@@ -49,7 +45,7 @@ void test(const string& name, RandomValueGenerator& generator, size_t nGenValues
 int main() {
 
     seed_seq seed = {24, 512, 42};
-    size_t nGenValues = 1000000, nSims = 5000;
+    size_t nGenValues = 1000000, nSims = 5;
 
     vector<Dataset> datasets = {
             {"Variable uniforme U(5,15)", {{5, 15}, {1, 1}}},
